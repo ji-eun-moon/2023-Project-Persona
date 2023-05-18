@@ -2,33 +2,63 @@
   <div>
     <div class="trending-list-header">
       <h1 class="me-2 list-header">What's Trending</h1>
-      <!-- <h2 class="me-2" v-if="showDaily">What's Daily Trending Movies</h2>
-      <h2 class="me-2" v-if="showWeekly">What's This Week Trending Movies</h2> -->
       <div class="button-container">
-        <button :class="['btn', 'btn-outline-secondary', { active: showDaily }]" @click="showDailyTrendingMovies">일별</button>
+        <button :class="['btn', 'btn-outline-secondary', { active: showDaily }]" @click="showDailyTrendingMovies" class="me-2">일별</button>
         <button :class="['btn', 'btn-outline-secondary', { active: showWeekly }]" @click="showWeeklyTrendingMovies">주별</button>
       </div>
     </div>
     <div class="card-container" v-if="showDaily">
-      <ul class="card-list">
-        <li v-for="movie in dailyTrendingMovies" :key="movie.id" class="card-item">
-          <MovieCard :movie="movie" />
-        </li>
-      </ul>
+      <div id="dailyCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <div v-for="(group, index) in dailyTrendingMoviesGrouped" :key="index" :class="['carousel-item', { active: index === 0 }]">
+            <ul class="card-list">
+              <li v-for="movie in group" :key="movie.id" class="card-item">
+                <MovieCard :movie="movie" />
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="carousel-control-wrapper">
+          <button class="carousel-control-prev" type="button" data-bs-target="#dailyCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#dailyCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      </div>
     </div>
     <div class="card-container" v-if="showWeekly">
-      <ul class="card-list">
-        <li v-for="movie in weeklyTrendingMovies" :key="movie.id" class="card-item">
-          <MovieCard :movie="movie" />
-        </li>
-      </ul>
+      <div id="weeklyCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <div v-for="(group, index) in weeklyTrendingMoviesGrouped" :key="index" :class="['carousel-item', { active: index === 0 }]">
+            <ul class="card-list">
+              <li v-for="movie in group" :key="movie.id" class="card-item">
+                <MovieCard :movie="movie" />
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="carousel-control-wrapper">
+          <button class="carousel-control-prev" type="button" data-bs-target="#weeklyCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#weeklyCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex';
-import MovieCard from '@/components/commons/MovieCard.vue'
+import MovieCard from '@/components/commons/MovieCard.vue';
 
 export default {
   name: "TrendingList",
@@ -63,8 +93,22 @@ export default {
     ...mapState({
       dailyTrendingMovies: state => state.trendingList.dailyTrendingMovies,
       weeklyTrendingMovies: state => state.trendingList.weeklyTrendingMovies
-    })
-  }
+    }),
+    dailyTrendingMoviesGrouped() {
+      const groups = [];
+      for (let i = 0; i < this.dailyTrendingMovies.length; i += 5) {
+        groups.push(this.dailyTrendingMovies.slice(i, i + 5));
+      }
+      return groups;
+    },
+    weeklyTrendingMoviesGrouped() {
+      const groups = [];
+      for (let i = 0; i < this.weeklyTrendingMovies.length; i += 5) {
+        groups.push(this.weeklyTrendingMovies.slice(i, i + 5));
+      }
+      return groups;
+    },
+  },
 };
 </script>
 
@@ -73,24 +117,19 @@ export default {
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 700;
   color: aliceblue;
+  margin-bottom: 20px;
 }
 
 .trending-list-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 .button-container {
   display: flex;
 }
 
-.button-container button {
-  margin-right: 8px;
-}
-
-.card-container {
-  overflow-x: scroll;
-}
 
 .card-list {
   display: flex;
@@ -100,8 +139,8 @@ export default {
 }
 
 .card-item {
-  flex: 0 0 calc(20% - 16px);
-  margin-right: 16px;
+  flex: 0 0 calc(20% - 3px);
+  margin-right: 3px;
 }
 
 .card-item:last-child {

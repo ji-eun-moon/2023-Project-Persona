@@ -31,6 +31,7 @@ export default {
 .card {
   position: relative;
   cursor: pointer;
+  z-index: 1;
 }
 
 .image-wrapper {
