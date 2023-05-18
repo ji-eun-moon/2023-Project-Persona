@@ -18,6 +18,16 @@ export default {
         TopArticles,
         MovieReviews,
         FreeTalks
+    },
+    computed: {
+    },
+    created() {
+      this.getArticles()
+    },
+    methods: {
+      getArticles() {
+        this.$store.dispatch('getArticles')
+      }
     }
 }
 </script>
