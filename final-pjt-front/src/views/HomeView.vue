@@ -1,10 +1,9 @@
 <template>
   <div>
-    <h1>Home</h1>
     <div class="container">
-      <NowPlayingList />
-      <TrendingList />
-      <UpcomingList />
+      <TrendingList class="my-5"/>
+      <NowPlayingList class="my-5"/>
+      <UpcomingList class="my-5"/>
       <GenreList />
     </div>
   </div>

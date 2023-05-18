@@ -72,6 +72,7 @@ export default {
 .list-header {
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 700;
+  color: aliceblue;
 }
 
 .trending-list-header {
