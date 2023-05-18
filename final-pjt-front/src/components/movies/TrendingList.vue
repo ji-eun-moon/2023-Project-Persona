@@ -1,42 +1,39 @@
 <template>
   <div>
-    <h5>TrendingList</h5>
-    <button @click="showDailyTrendingMovies">일별</button>
-    <button @click="showWeeklyTrendingMovies">주별</button>
-    <h2 v-if="showDaily">Daily Trending Movies</h2>
-    <div class="card-container" v-if="showDaily">
-      <VueSlickCarousel :autoplay="true" :autoplaySpeed="3000">
-        <ul class="card-list">
-          <li v-for="movie in dailyTrendingMovies" :key="movie.id" class="card-item">
-            <MovieCard :movie="movie" />
-          </li>
-        </ul>
-      </VueSlickCarousel>
+    <div class="trending-list-header">
+      <h1 class="me-2 list-header">What's Trending</h1>
+      <!-- <h2 class="me-2" v-if="showDaily">What's Daily Trending Movies</h2>
+      <h2 class="me-2" v-if="showWeekly">What's This Week Trending Movies</h2> -->
+      <div class="button-container">
+        <button :class="['btn', 'btn-outline-secondary', { active: showDaily }]" @click="showDailyTrendingMovies">일별</button>
+        <button :class="['btn', 'btn-outline-secondary', { active: showWeekly }]" @click="showWeeklyTrendingMovies">주별</button>
+      </div>
     </div>
-    <h2 v-if="showWeekly">Weekly Trending Movies</h2>
+    <div class="card-container" v-if="showDaily">
+      <ul class="card-list">
+        <li v-for="movie in dailyTrendingMovies" :key="movie.id" class="card-item">
+          <MovieCard :movie="movie" />
+        </li>
+      </ul>
+    </div>
     <div class="card-container" v-if="showWeekly">
-      <VueSlickCarousel :autoplay="true" :autoplaySpeed="3000">
-        <ul class="card-list">
-          <li v-for="movie in weeklyTrendingMovies" :key="movie.id" class="card-item">
-            <MovieCard :movie="movie" />
-          </li>
-        </ul>
-      </VueSlickCarousel>
+      <ul class="card-list">
+        <li v-for="movie in weeklyTrendingMovies" :key="movie.id" class="card-item">
+          <MovieCard :movie="movie" />
+        </li>
+      </ul>
     </div>
   </div>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex';
-import MovieCard from '@/components/commons/MovieCard.vue';
-import VueSlickCarousel from 'vue-slick-carousel';
-import 'vue-slick-carousel/dist/vue-slick-carousel.css';
+import MovieCard from '@/components/commons/MovieCard.vue'
 
 export default {
   name: "TrendingList",
   components: {
     MovieCard,
-    VueSlickCarousel
   },
   data() {
     return {
@@ -72,6 +69,24 @@ export default {
 </script>
 
 <style>
+.list-header {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 700;
+}
+
+.trending-list-header {
+  display: flex;
+  align-items: center;
+}
+
+.button-container {
+  display: flex;
+}
+
+.button-container button {
+  margin-right: 8px;
+}
+
 .card-container {
   overflow-x: scroll;
 }
@@ -92,7 +107,6 @@ export default {
   margin-right: 0;
 }
 
-/* 추가한 스타일 */
 .card-item .card {
   width: 100%;
 }
@@ -100,5 +114,9 @@ export default {
 .card-item .card img {
   max-width: 100%;
   height: auto;
+}
+
+.btn.active {
+  background-color: #6c757d;
 }
 </style>

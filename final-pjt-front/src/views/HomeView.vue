@@ -1,10 +1,12 @@
 <template>
   <div>
     <h1>Home</h1>
-    <NowPlayingList />
-    <TrendingList />
-    <UpcomingList />
-    <GenreList />
+    <div class="container">
+      <NowPlayingList />
+      <TrendingList />
+      <UpcomingList />
+      <GenreList />
+    </div>
   </div>
 </template>
 
