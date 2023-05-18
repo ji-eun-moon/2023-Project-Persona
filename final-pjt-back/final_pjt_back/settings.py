@@ -31,10 +31,10 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'accounts',
+    # 'accounts',
     'articles',
-    # 'corsheaders',
-    # 'rest_framework',
+    'corsheaders',
+    'rest_framework',
     # 'rest_framework.authtoken',
     # 'dj_rest_auth',
     # 'django.contrib.sites',
@@ -53,7 +53,8 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    # 'corseaders.middleware.CorsMiddleware',
+
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -136,9 +137,12 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# SITE_ID = 1
+SITE_ID = 1
 
 # CORS_ALLOW_ALL_ORIGINS = True 
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:8080',
+]
 
 # AUTH_USER_MODEL = 'accounts.User'
 
