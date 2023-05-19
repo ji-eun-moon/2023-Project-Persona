@@ -73,7 +73,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .modal-container {
   position: fixed;
   top: 0;
