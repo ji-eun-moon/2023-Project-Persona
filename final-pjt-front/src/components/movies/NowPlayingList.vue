@@ -8,7 +8,7 @@
         <div v-for="(group, index) in nowPlayingMovieGrouped" :key="index" :class="['carousel-item', { active: index === 0 }]" >
           <ul class="card-list">
             <li v-for="movie in group" :key="movie.id" class="card-item">
-              <MovieCard :movie="movie" />
+              <MovieCard :movie="movie" @movie-selected="handleMovieSelected"/>
             </li>
           </ul>
         </div>
@@ -41,6 +41,9 @@ export default {
   },
   methods: {
     ...mapActions(['getNowPlayingMovies']),
+    handleMovieSelected(movieId) {
+      this.$emit('movie-selected', movieId);
+    },
   },
   computed: {
     ...mapState({

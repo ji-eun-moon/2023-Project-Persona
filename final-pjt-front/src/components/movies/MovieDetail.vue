@@ -9,14 +9,18 @@ import { mapState } from 'vuex'
 
 export default {
   name: "MovieDetail",
+  props:{
+    movieId : Number
+  },
   computed: {
     ...mapState({
       movieDetail: state => state.moviedetail.movieDetail,
     }),
   },
   created() {
-    const movieId = this.$route.params.movieId
-    this.$store.dispatch("getMovieDetail", movieId);
+    // const movieId = this.$route.params.movieId
+    // this.$store.dispatch("getMovieDetail", movieId);
+    this.$store.dispatch("getMovieDetail", this.movieId);
   },
 };
 </script>
