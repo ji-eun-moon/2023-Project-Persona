@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import CommunityView from '../views/CommunityView.vue'
 import ProfileView from '../views/ProfileView.vue'
+import movies from './movies'
 
 Vue.use(VueRouter)
 
@@ -22,6 +23,7 @@ const routes = [
     name: 'profile',
     component: ProfileView
   },
+  ...movies
 
 ]
 

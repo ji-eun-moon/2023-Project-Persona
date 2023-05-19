@@ -1,7 +1,7 @@
 <template>
-  <div class="card h-100 shadow" @mouseover="hover = true" @mouseleave="hover = false">
+  <div class="card h-100 shadow" @click="handleClick" @mouseover="handleMouseOver" @mouseleave="handleMouseLeave">
     <div class="image-wrapper">
-      <img :src="'https://image.tmdb.org/t/p/original' + movie.poster_path" alt="poster">
+      <img :src="getPosterPath()" :alt="movie.title" class="card-image">
       <div class="card-info" :class="{ 'hovered': hover }">
         <h5 class="card-title text-center" v-show="hover">{{ movie.title }}</h5>
         <div class="icon-text justify-content-end" v-show="hover">
@@ -15,17 +15,43 @@
 
 <script>
 export default {
-    name: "MovieCard",
-    props: {
-      movie: Object
-    },
-    data() {
+  name: "MovieCard",
+  props: {
+    movie: Object,
+  },
+  data() {
     return {
-      hover: false
-    }
-  }
-}
+      hover: false,
+    };
+  },
+  computed: {
+    posterExists() {
+      return this.movie.poster_path !== null;
+    },
+  },
+  methods: {
+    getPosterPath() {
+      if (this.posterExists) {
+        return "https://image.tmdb.org/t/p/original" + this.movie.poster_path;
+      } else {
+        // 기본 이미지 파일 경로
+        return require("@/assets/logo.png");
+      }
+    },
+    handleClick() {
+      // 클릭된 카드의 movie id를 사용하여 디테일 페이지로 이동
+      this.$router.push({ name: "MovieDetail", params: { movieId: this.movie.id } });
+    },
+    handleMouseOver() {
+      this.hover = true;
+    },
+    handleMouseLeave() {
+      this.hover = false;
+    },
+  },
+};
 </script>
+
 
 <style>
 .card {
@@ -33,6 +59,7 @@ export default {
   cursor: pointer;
   z-index: 1;
 }
+
 
 .image-wrapper {
   position: relative;
