@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="trending-list-header">
-      <h1 class="me-2 list-header">이런 장르는 어때요?</h1>
+      <h1 class="me-1 list-header">이런 장르는 어때요?</h1>
     </div>
 
     <div v-for="(genre, index) in selectedGenres" :key="index">
@@ -11,7 +11,7 @@
           <div v-for="(group, groupIndex) in GenreMoviesGroup[index]" :key="groupIndex" :class="['carousel-item', { active: groupIndex === 0 }]">
             <ul class="card-list">
               <li v-for="movie in group" :key="movie.id" class="card-item">
-                <MovieCard :movie="movie" />
+                <MovieCard :movie="movie" @movie-selected="handleMovieSelected"/>
               </li>
             </ul>
           </div>
@@ -85,6 +85,9 @@ export default {
             this.$set(this.genreMovies, genre.id, []);
           });
       });
+    },
+    handleMovieSelected(movieId) {
+      this.$emit('movie-selected', movieId);
     },
   },
 

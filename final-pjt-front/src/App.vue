@@ -11,6 +11,9 @@
 </template>
 
 <style>
+body {
+  background-color: #1c1d1f;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
