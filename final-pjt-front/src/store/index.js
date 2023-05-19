@@ -4,6 +4,7 @@ import trendingList from './modules/trendingList'
 import nowPlayingList from './modules/nowPlayingList'
 import upcomingList from './modules/upcomingList'
 import community from './modules/community'
+import moviedetail from './modules/moviedetail'
 
 Vue.use(Vuex)
 
@@ -21,5 +22,6 @@ export default new Vuex.Store({
     nowPlayingList,
     upcomingList,
     community,
+    moviedetail
   }
 })
