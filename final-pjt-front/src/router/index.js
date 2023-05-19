@@ -4,6 +4,7 @@ import HomeView from '../views/HomeView.vue'
 import CommunityView from '../views/CommunityView.vue'
 import ProfileView from '../views/ProfileView.vue'
 import movies from './movies'
+import community from './community'
 
 Vue.use(VueRouter)
 
@@ -23,7 +24,8 @@ const routes = [
     name: 'profile',
     component: ProfileView
   },
-  ...movies
+  ...movies,
+  ...community
 
 ]
 

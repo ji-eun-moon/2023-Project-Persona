@@ -1,6 +1,9 @@
 <template>
   <div>
     <h5>MovieReviews</h5>
+    <router-link :to="{ name:'CreateView' }">
+      <button>글쓰기</button>
+    </router-link>
     <ArticleListItem 
       v-for="article in articles" :key="article.id" :article="article"/>
   </div>
