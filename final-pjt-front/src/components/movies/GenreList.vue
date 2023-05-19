@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="trending-list-header">
-      <h1 class="me-2 list-header">이런 장르는 어때요?</h1>
+      <h1 class="me-1 list-header">이런 장르는 어때요?</h1>
     </div>
 
     <div v-for="(genre, index) in selectedGenres" :key="index">

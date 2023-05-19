@@ -35,7 +35,7 @@ export default {
         return "https://image.tmdb.org/t/p/original" + this.movie.poster_path;
       } else {
         // 기본 이미지 파일 경로
-        return require("@/assets/logo.png");
+        return require("@/assets/default-poster.png");
       }
     },
     handleClick() {
@@ -59,11 +59,18 @@ export default {
   position: relative;
   cursor: pointer;
   z-index: 1;
+  border: 1px solid black;
+  transition: border-color 0.3s ease;
 }
 
+.card:hover {
+  border-color: #FBBF24;
+}
 
 .image-wrapper {
   position: relative;
+  width: 100%;
+  height: 100%;
 }
 
 .card-info {
@@ -101,5 +108,12 @@ export default {
 
 .c-yellow {
   color: #FBBF24;
+}
+
+.card-image {
+  border-radius: 5px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 </style>
