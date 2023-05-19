@@ -81,8 +81,6 @@ def comment_detail(request, comment_pk):
             serializer.save()
             return Response(serializer.data)
 
-    
-
 
 @api_view(['POST'])
 def comment_create(request, article_pk):
