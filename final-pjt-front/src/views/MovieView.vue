@@ -1,8 +1,8 @@
 <template>
   <div>
-    <h1 class="list-header">찾고 싶은 영화가 있으신가요?</h1>
+    <h1 class="list-header mt-5">찾고 싶은 영화가 있으신가요?</h1>
     <div class="input-group search">
-      <input type="text" v-model="searchQuery" @keyup.enter="searchMovies" class="form-control" placeholder="영화 제목을 입력하세요."/>
+      <input type="text" v-model="searchQuery" @keydown.enter="searchMovies" class="form-control" placeholder="영화 제목을 입력하세요."/>
       <i @click="searchMovies" class="btn btn-light bi bi-search search-btn"></i>
     </div>
 
@@ -11,6 +11,10 @@
       <div class="movie-list">
         <MovieCard v-for="movie in movies" :key="movie.id" :movie="movie" class="movie-card" @movie-selected="handleMovieSelected"/>
       </div>
+    </div>
+
+    <div v-else-if="hasSearched" class="container">
+      <h5 class="list-header">'{{searchQueryDisplay}}' 검색 결과가 없습니다. 🥲</h5>
     </div>
 
     <div class="modal-container" v-if="showModal==true" >
@@ -34,7 +38,8 @@ export default {
       searchQuery: '',
       previousSearchQuery: '',
       showModal: false,
-      selectedMovieId: null
+      selectedMovieId: null,
+      hasSearched: false
     };
   },
   components: {
@@ -69,6 +74,7 @@ export default {
      if(this.searchQuery.trim() !== '') {
         this.getMovies(this.searchQuery);
         this.previousSearchQuery = this.searchQuery;
+        this.hasSearched = true;
       } else {
         alert("검색어를 입력하세요.");
       }
