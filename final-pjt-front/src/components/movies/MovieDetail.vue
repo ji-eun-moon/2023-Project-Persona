@@ -4,6 +4,12 @@
       <div class="poster-wrapper">
         <img :src="getMoviePosterUrl(movieDetail.poster_path)" alt="Movie Poster" class="poster-image" />
       </div>
+        <div class="d-flex justify-content-center mt-2">
+          <p style="color:white;" class="me-3 movie mt-1">보고 싶은 영화 담기</p>
+          <a class="btn-like" @click="toggleLike">
+          <i class="bi fs-3" :class="isLiked ? 'bi-heart-fill' : 'bi-heart'"></i>
+          </a>
+      </div>
     </div>
     <div class="movie-info">
       <h1 class="movie-title">{{ movieDetail.title }}</h1>
@@ -38,6 +44,11 @@ export default {
   props: {
     movieId: Number
   },
+  data() {
+    return {
+      isLiked: false,
+    };
+  },
   computed: {
     ...mapState({
       movieDetail: state => state.moviedetail.movieDetail,
@@ -66,6 +77,9 @@ export default {
         return require("@/assets/default-profile.jpg");
       }
     },
+    toggleLike() {
+      this.isLiked = !this.isLiked;
+    }
   }
 };
 </script>
@@ -79,7 +93,7 @@ export default {
 
 .movie-poster {
   flex: 0 0 300px; /* 원하는 고정 너비 설정 */
-  margin: 40px;
+  margin: 40px 40px 80px 40px;
 }
 
 .poster-wrapper {
@@ -102,13 +116,13 @@ export default {
 .movie-title {
   color: aliceblue;
   font-family: 'Noto Sans KR', sans-serif;
-  font-size: 900;
+  font-weight: 700;
 }
 
 .movie {
   font-family: 'Noto Sans KR', sans-serif;
   color: aliceblue;
-  font-size: 100;
+  font-weight: 400;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
@@ -141,6 +155,11 @@ export default {
   font-family: 'Noto Sans KR', sans-serif;
   font-size: 14px;
   margin-top: 10px;
+}
+
+.btn-like {
+  color: crimson;
+  cursor: pointer;
 }
 
 </style>
