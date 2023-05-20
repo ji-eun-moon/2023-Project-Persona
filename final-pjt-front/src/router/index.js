@@ -6,6 +6,7 @@ import ProfileView from '../views/ProfileView.vue'
 import MainView from '../views/MainView.vue'
 import movies from './movies'
 import community from './community'
+import login from './login'
 
 Vue.use(VueRouter)
 
@@ -31,7 +32,8 @@ const routes = [
     component: ProfileView
   },
   ...movies,
-  ...community
+  ...community,
+  ...login
 
 ]
 

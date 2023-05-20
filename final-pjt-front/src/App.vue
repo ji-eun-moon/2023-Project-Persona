@@ -17,6 +17,12 @@
             <li class="nav-item">
               <router-link class="nav-link" :to="{ name: 'community' }">Community</router-link>
             </li>
+            <li class="nav-item">
+              <router-link class="nav-link" :to="{ name: 'SignUpView' }">Sign Up</router-link>
+            </li>
+            <li class="nav-item">
+              <router-link class="nav-link" :to="{ name: 'LoginView' }">Login</router-link>
+            </li>
           </ul>
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
