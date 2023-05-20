@@ -31,19 +31,20 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    # 'accounts',
+    'accounts',
     'articles',
     'movies',
     'rest_framework',
     'corsheaders',
     
-    # 'rest_framework.authtoken',
-    # 'dj_rest_auth',
-    # 'django.contrib.sites',
-    # 'allath',
-    # 'allauth.account',
-    # 'allauth.socialaccount',
-    # 'dj_rest_auth.registration',
+    'rest_framework.authtoken',
+    'dj_rest_auth',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'dj_rest_auth.registration',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -51,6 +52,24 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
+# 회원가입시 토큰 발급
+REST_AUTH = {
+    'SESSION_LOGIN': False,
+}
+
+# 하나의 컨텐츠로 여러 개의 도메인에 등록하고 싶을 때 사용
+SITE_ID = 1
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -63,6 +82,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True 
+
+# CORS_ALLOWED_ORIGINS = [
+#     'http://localhost:8080',
+# ]
+
 
 ROOT_URLCONF = 'final_pjt_back.urls'
 
@@ -139,20 +165,6 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-SITE_ID = 1
+AUTH_USER_MODEL = 'accounts.User'
 
-CORS_ALLOW_ALL_ORIGINS = True 
-# CORS_ALLOWED_ORIGINS = [
-#     'http://localhost:8080',
-# ]
 
-# AUTH_USER_MODEL = 'accounts.User'
-
-# REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES': [
-#         'rest_framework.authentication.TokenAuthentication',
-#     ],
-#     'DEFAULT_PERMISSION_CLASSES': [
-#         'rest_framework.permissions.AllowAny',
-#     ],
-# }
