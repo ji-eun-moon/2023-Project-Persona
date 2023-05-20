@@ -1,10 +1,30 @@
 <template>
   <div id="app">
-    <nav>
-      <router-link :to="{ name: 'home' }">Home</router-link> |
-      <router-link :to="{ name: 'movies' }">Movies</router-link> |
-      <router-link :to="{ name: 'community' }">Community</router-link> |
-      <router-link :to="{ name: 'profile' }">Profile</router-link>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <router-link class="navbar-brand" :to="{ name: 'home' }">logo</router-link>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <router-link class="nav-link" :to="{ name: 'home' }">Home</router-link>
+            </li>
+            <li class="nav-item">
+              <router-link class="nav-link" :to="{ name: 'movies' }">Movies</router-link>
+            </li>
+            <li class="nav-item">
+              <router-link class="nav-link" :to="{ name: 'community' }">Community</router-link>
+            </li>
+          </ul>
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <router-link class="nav-link" :to="{ name: 'profile' }">Profile</router-link>
+            </li>
+          </ul>
+        </div>
+      </div>
     </nav>
     <router-view/>
   </div>
@@ -33,6 +53,6 @@ nav a {
 }
 
 nav a.router-link-exact-active {
-  color: #42b983;
+  color: #42b983 !important;
 }
 </style>
