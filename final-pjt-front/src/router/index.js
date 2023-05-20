@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import CommunityView from '../views/CommunityView.vue'
 import ProfileView from '../views/ProfileView.vue'
+import MainView from '../views/MainView.vue'
 import movies from './movies'
 import community from './community'
 
@@ -11,6 +12,11 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
+    name: 'main',
+    component: MainView
+  },
+  {
+    path: '/home',
     name: 'home',
     component: HomeView
   },
