@@ -4,12 +4,15 @@
       <div class="poster-wrapper">
         <img :src="getMoviePosterUrl(movieDetail.poster_path)" alt="Movie Poster" class="poster-image" />
       </div>
-        <div class="d-flex justify-content-center mt-2">
+        <div class="d-flex justify-content-center ms-3">
           <p style="color:white;" class="me-3 movie mt-1">보고 싶은 영화 담기</p>
-          <a class="btn-like" @click="toggleLike">
+          <a class="btn-like" @click="toggleLike(movieId)" :disabled="!isLoggedIn">
           <i class="bi fs-3" :class="isLiked ? 'bi-heart-fill' : 'bi-heart'"></i>
           </a>
-      </div>
+        </div>
+        <div class="d-flex justify-content-center">
+          <p style="color:white;" class="movie mt-2">이 영화를 담은 사람 : {{likeCount}} 명</p>
+        </div>
     </div>
     <div class="movie-info">
       <h1 class="movie-title">{{ movieDetail.title }}</h1>
@@ -39,14 +42,18 @@
 <script>
 import { mapState } from 'vuex';
 
+import axios from 'axios'
+const API_URL = 'http://127.0.0.1:8000'
+
 export default {
   name: "MovieDetail",
   props: {
-    movieId: Number
+    movieId: Number,
   },
   data() {
     return {
       isLiked: false,
+      likeCount: 0,
     };
   },
   computed: {
@@ -57,10 +64,18 @@ export default {
     posterExists() {
       return this.movieDetail.poster_path !== null;
     },
+    isLoggedIn() {
+      return this.loggedIn;
+    },
   },
   created() {
     this.$store.dispatch("getMovieDetail", this.movieId);
     this.$store.dispatch("getMovieCast", this.movieId);
+    this.saveMovie(this.movieId).then(() => {
+    this.checkLikeStatus(this.movieId); // Save movie first, then check like status
+    }).catch(error => {
+      console.error('Failed to save movie:', error);
+    });
   },
   methods: {
     getMoviePosterUrl(posterPath) {
@@ -77,9 +92,63 @@ export default {
         return require("@/assets/default-profile.jpg");
       }
     },
-    toggleLike() {
+    toggleLike(movieId) {
       this.isLiked = !this.isLiked;
+      this.handleLike(movieId);
+      this.checkLikeStatus(this.movieId); // 토글할때마다 좋아요 수 업데이트 하기 위해서
+    },
+    async checkLikeStatus(movieId) {
+      try {
+        const token = this.$store.state.token.token; // 토큰 가져오기
+        const config = {
+          headers: {
+            Authorization: `Token ${token}`, // 헤더에 토큰 추가
+          },
+        };
+        const response = await axios.get(`${API_URL}/api/v1/movies/${movieId}/like/`, config);
+        this.isLiked = response.data.isLiked; // 좋아요 여부 업데이트
+        this.likeCount = response.data.likeCount; // 좋아요 수 업데이트
+      } catch (error) {
+        console.error('Failed to check like status:', error);
+      }
+    },
+    async handleLike(movieId) {
+      try {
+        await this.saveMovie(movieId);
+        await this.movieLike(movieId);
+      } catch (error) {
+        console.error('Failed to toggle like:', error);
+      }
+    },
+
+    async saveMovie(movieId) {
+      try {
+        const token = this.$store.state.token.token; // 토큰 가져오기
+        const config = {
+          headers: {
+            Authorization: `Token ${token}`, // 헤더에 토큰 추가
+          },
+        };
+        await axios.post(`${API_URL}/api/v1/movies/${movieId}/`, null, config);
+      } catch (error) {
+        console.error('Failed to save movie:', error);
+      }
+    },
+
+    async movieLike(movieId) {
+      try {
+        const token = this.$store.state.token.token; // 토큰 가져오기
+        const config = {
+          headers: {
+            Authorization: `Token ${token}`, // 헤더에 토큰 추가
+          },
+        };
+        await axios.post(`${API_URL}/api/v1/movies/${movieId}/like/`, null, config);
+      } catch (error) {
+        console.error('Failed to like movie:', error);
+      }
     }
+
   }
 };
 </script>
@@ -93,7 +162,7 @@ export default {
 
 .movie-poster {
   flex: 0 0 300px; /* 원하는 고정 너비 설정 */
-  margin: 40px 40px 80px 40px;
+  margin: 40px 40px 100px 40px;
 }
 
 .poster-wrapper {
