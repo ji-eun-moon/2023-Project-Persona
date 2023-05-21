@@ -77,7 +77,7 @@ export default {
         const url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=ko&with_genres=${genre.id}&sort_by=popularity.desc`;
         axios.get(url)
           .then(response => {
-            console.log(response.data)
+            // console.log(response.data)
             this.$set(this.genreMovies, genre.id, response.data.results);
           })
           .catch(error => {

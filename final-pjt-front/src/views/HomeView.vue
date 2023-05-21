@@ -7,12 +7,15 @@
       <GenreList @movie-selected="handleMovieSelected"/>
     </div>
 
-  <div class="modal-container" v-if="showModal==true" >
-    <div class="modal-content" :style="modalStyle">
-      <MovieDetail :movieId="selectedMovieId" />
-      <button class="close-button" @click="showModal=false"><i class="bi bi-x-circle-fill c-red"></i></button>
+   <div class="modal-container" v-if="showModal==true" >
+      <div class="modal-content" :style="modalStyle">
+        <div class="modal-body">
+          <MovieDetail :movieId="selectedMovieId" />
+        </div>
+        <button class="close-button" @click="showModal=false"><i class="bi bi-x-circle-fill c-red"></i></button>
+      </div>
     </div>
-  </div>
+
   </div>
 </template>
 
@@ -94,6 +97,11 @@ export default {
   text-align: center;
   border-radius: 10px;
   width: 90%;
+  overflow-y: auto;
+}
+
+.modal-body {
+  max-height: 80vh; /* 모달 내용의 최대 높이 설정 */
 }
 
 

@@ -18,7 +18,7 @@ const upcomingList = {
     getUpcomingMovies(context){
       return axios.get(`${API_URL}?api_key=${API_KEY}&language=ko&page=1&region=KR`)
         .then(response => {
-          console.log(response.data.results)
+          // console.log(response.data.results)
           context.commit('GET_UPCOMING_MOVIES', response.data.results)
         })
         .catch(error => {
