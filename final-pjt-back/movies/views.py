@@ -5,7 +5,7 @@ from .models import Movie, Review
 from .serializers import MovieSerializer, ReviewSerializer
 
 from rest_framework.decorators import permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -24,7 +24,7 @@ def save_movie(request, movie_pk):
 
 
 @api_view(['POST', 'GET'])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticatedOrReadOnly])
 def movie_like(request, movie_pk):
     # 좋아요 유무와 좋아요 수 보내기
     if request.method == 'GET':
@@ -47,26 +47,28 @@ def movie_like(request, movie_pk):
 
 
 @api_view(['GET', 'POST'])
-@permission_classes([IsAuthenticated])
-def movie_review(request, movie_pk, review_id=None):
+@permission_classes([IsAuthenticatedOrReadOnly])
+def movie_review(request, movie_pk):
 
     if request.method == 'GET':
-        reviews = get_list_or_404(Review, movie_id=movie_pk)[::-1]
+        reviews = Review.objects.filter(movie__movie_id=movie_pk)[::-1]
         serializer = ReviewSerializer(reviews, many=True)
         return Response(serializer.data)
     
     elif request.method == 'POST':
-        movie = get_object_or_404(Movie, pk=movie_pk)
+        movie = get_object_or_404(Movie, movie_id=movie_pk)
         user = request.user
         serializer = ReviewSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save(movie=movie, user=user)
+            # 영화의 평균 평점 업데이트
+            movie.save()
             return Response(serializer.data, status=201)
     
 @api_view(['PUT', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def reviews_update(request, movie_pk, review_pk):
-    movie = get_object_or_404(Movie, pk=movie_pk)
+    movie = get_object_or_404(Movie, movie_id=movie_pk)
 
     if request.method == 'PUT':
         if request.user == review.user:
@@ -74,6 +76,8 @@ def reviews_update(request, movie_pk, review_pk):
             serializer = ReviewSerializer(review, data=request.data)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
+                # 영화의 평균 평점 업데이트
+                movie.save()
                 reviews = movie.reviews.all()
                 serializer = ReviewSerializer(reviews, many=True)
                 return Response(serializer.data, status=200)
@@ -82,6 +86,8 @@ def reviews_update(request, movie_pk, review_pk):
         review = get_object_or_404(Review, pk=review_pk, movie=movie_pk)
         if request.user == review.user:
             review.delete()
+            # 영화의 평균 평점 업데이트
+            movie.save()
             reviews = movie.reviews.all()
             serializer = ReviewSerializer(reviews, many=True)
             return Response(serializer.data, status=204)
