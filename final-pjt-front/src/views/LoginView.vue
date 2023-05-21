@@ -15,8 +15,10 @@
 
 <script>
 import axios from 'axios'
+import { mapActions } from 'vuex';
 
 export default {
+  
   name: 'LoginView',
   data() {
     return {
@@ -27,6 +29,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['saveToken']),
     async signUp() {
       if (this.password1 !== this.password2) {
         alert('비밀번호가 일치하지 않습니다.')
@@ -46,15 +49,17 @@ export default {
     },
     async login() {
         try {
-            console.log(this.username)
-            console.log(this.password)
+            // console.log(this.username)
+            // console.log(this.password)
             const response = await axios.post(this.URL + 'accounts/login/', {
                 username: this.username,
                 password: this.password,
             })
             if (response.data) {
-                console.log(response.data)
-                this.TOKEN = response.data.key 
+                // console.log(response.data)
+                this.TOKEN = response.data.key
+                // token 정보 store에 저장
+                this.saveToken(this.TOKEN)
             } 
 
         } catch(error) {
