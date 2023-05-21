@@ -1,15 +1,19 @@
 <template>
-  <div>
-    <h1>로그인</h1>
+  <div class="login-container container">
+    <!-- <h1 class="login-header">로그인</h1> -->
     <form @submit.prevent="login">
-      <label for="username">아이디: </label>
+      <!-- <label for="username">아이디: </label> -->
       <input type="text" id="username" v-model="username" placeholder="아이디를 입력하세요"><br>
 
-      <label for="password">비밀번호: </label>
+      <!-- <label for="password">비밀번호: </label> -->
       <input type="password" id="password" v-model="password" placeholder="비밀번호를 입력하세요"><br>
 
-      <input type="submit" value="login">
+      <input type="submit" value="로그인">
     </form>
+
+    <div class="error-message mt-3" v-if="loginError">
+      <p>아이디와 비밀번호를 다시 확인해주세요.</p>
+    </div>
   </div>
 </template>
 
@@ -26,6 +30,7 @@ export default {
       password: '',
       URL: 'http://127.0.0.1:8000/',
       TOKEN: '',
+      loginError: false,
     }
   },
   methods: {
@@ -60,9 +65,13 @@ export default {
                 this.TOKEN = response.data.key
                 // token 정보 store에 저장
                 this.saveToken(this.TOKEN)
+                // 로그인 상태 변경
+                this.$store.commit("setLoggedIn", true);
+                console.log(this.$store.state.token.loggedIn)
             } 
 
         } catch(error) {
+            this.loginError = true
             console.log(error)
         }
     },
@@ -70,6 +79,39 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.login-container {
+  width: 300px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f2f2f2;
+  border-radius: 5px;
+}
 
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+input[type="text"],
+input[type="password"] {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+input[type="submit"] {
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 700;
+}
+
+input[type="submit"]:hover {
+  background-color: #45a049;
+}
 </style>

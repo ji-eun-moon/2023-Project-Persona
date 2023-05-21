@@ -1,6 +1,7 @@
 const token ={
     state: {
-      token: null
+      token: null,
+      loggedIn: false,
     },
     getters: {
     },
@@ -8,6 +9,9 @@ const token ={
       setToken(state, token) {
         state.token = token;
         console.log('token:', state.token);
+      },
+      setLoggedIn(state, value) {
+        state.loggedIn = value;
       },
     },
     actions: {

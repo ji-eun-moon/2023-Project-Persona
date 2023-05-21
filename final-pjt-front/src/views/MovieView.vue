@@ -19,7 +19,9 @@
 
     <div class="modal-container" v-if="showModal==true" >
       <div class="modal-content" :style="modalStyle">
-        <MovieDetail :movieId="selectedMovieId" />
+        <div class="modal-body">
+          <MovieDetail :movieId="selectedMovieId" />
+        </div>
         <button class="close-button" @click="showModal=false"><i class="bi bi-x-circle-fill c-red"></i></button>
       </div>
     </div>
