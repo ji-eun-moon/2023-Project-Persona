@@ -29,10 +29,11 @@
       </div>
       <h4 class="movie">{{ movieDetail.tagline }}</h4>
       <h6 class="movie movie-overview">{{ movieDetail.overview }}</h6>
-      <h3 class="movie-title mt-5 mb-4">출연진</h3>
+      <h3 class="movie-title mt-5 mb-2">출연진</h3>
+      <p class="movie"> 맘에 드는 배우가 있으면 부캐로 골라보세요! </p>
       <div class="cast-images d-flex justify-content-center">
         <div v-for="(cast, index) in movieCast" :key="index" class="cast-profile">
-          <img :src="getProfileImageUrl(cast.profile_path)" :alt="cast.name" class="cast-image" />
+          <img :src="getProfileImageUrl(cast.profile_path)" :alt="cast.name" class="cast-image cursor-pointer" @click="saveProfileImage(cast)" />
           <span class="cast-name movie-title">{{ cast.name }}</span>
         </div>
       </div>
@@ -49,7 +50,7 @@
           :border-width="4" border-color="#d8d8d8" :rounded-corners="true" :star-points="[23,2, 14,17, 0,19, 10,34, 7,50, 23,43, 38,50, 36,34, 46,19, 31,17]"></star-rating>
         </div>
         <form @submit.prevent="createReview" class="d-flex">
-          <textarea id="content" v-model="content" class="expand-textarea" :placeholder="isLoggedIn ? '한줄평 입력' : '한줄평을 남기려면 로그인하세요.'"></textarea>
+          <textarea id="content" v-model="content" class="expand-textarea" :placeholder="isLoggedIn ? '한줄평 입력' : '한줄평을 남기려면 로그인하세요.'" @click="checkLogin"></textarea>
           <button type="submit" class="btn btn-light btn-sm btn-review" :disabled="!isLoggedIn">한줄평 남기기</button>
         </form>
       <div class="review-list-container mt-5">
@@ -68,7 +69,7 @@
       </div>
     </div>
 
-      <div class="modal-container" v-if="showModal">
+      <div class="modal-container" v-if="showModal && !isLoggedIn">
       <div class="login-modal-content">
         <div class="login-modal-header">
           <i class="bi bi-backspace-fill movie me-2 fs-5" @click="showModal=false"></i>
@@ -271,6 +272,33 @@ export default {
     formatDateTime(dateTime) {
       return moment(dateTime).format('YYYY-MM-DD HH:mm:ss');
     },
+
+    checkLogin(){
+      if (this.isLoggedIn === false) {
+        alert('로그인이 필요한 서비스입니다.')
+        this.showModal = true
+      } 
+    },
+    async saveProfileImage(actor) {
+      try {
+        const token = this.$store.state.token.token
+        const username = this.$store.state.token.username
+        const response = await axios.put(`http://127.0.0.1:8000/api/v1/upload_image/${username}/`, 
+        { profile_img: actor.profile_path,
+          character:  actor.id },
+        {
+          headers: {
+          Authorization: `Token ${token}`} // 헤더에 토큰 추가
+        });
+
+        console.log(response.data); // 서버 응답 확인
+
+        // 상태 정보에 저장된 프로필 사진 업데이트 - 바로 이미지 바꾸기 위해서!
+        this.$store.dispatch('saveUserProfileImg', response.data.profile_img)
+      } catch (error) {
+        console.error('이미지 업로드 중 오류 발생:', error);
+      }
+    }
   },
 };
 </script>

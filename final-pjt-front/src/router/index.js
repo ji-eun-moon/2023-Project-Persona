@@ -27,7 +27,7 @@ const routes = [
     component: CommunityView
   },
   {
-    path: '/profile',
+    path: '/profile/:username',
     name: 'profile',
     component: ProfileView
   },
