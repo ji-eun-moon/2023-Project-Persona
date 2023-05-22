@@ -26,9 +26,9 @@
               <router-link class="nav-link" :to="{ name: 'profile' }">Profile</router-link>
             </li>
             <li class="nav-item">
-              <router-link class="nav-link" :to="{ name: 'LoginView' }">login</router-link>
+              <router-link class="nav-link" :to="{ name: 'LoginView' }" v-if="!$store.state.token.loggedIn">login</router-link>
             </li>
-            <button @click="logout">logout</button>
+            <button @click="logout" v-if="$store.state.token.loggedIn">logout</button>
           </ul>
         </div>
       </div>
@@ -45,8 +45,13 @@ export default {
   },
   created() {
     const token = localStorage.getItem('token');
+    const username = localStorage.getItem('username');
     if (token) {
+      // 로컬스토리지에 토큰이 존재한다면 - 스토어에 토큰, 로그인상태, username 저장
       this.$store.commit('setToken', token);
+      this.$store.commit("setLoggedIn", true);
+      this.$store.dispatch('saveUsername', username)
+      console.log('로그인 유지 확인:',this.$store.state.token.username, this.$store.state.token.loggedIn, this.$store.state.token.token)
     }
   },
   methods : {
@@ -54,7 +59,8 @@ export default {
     logout() {
       this.removeLoggedIn(); // Vuex에서 로그인 정보 제거
       localStorage.removeItem('token'); // 로컬 스토리지에서 토큰 제거
-      console.log('false 이면 로그아웃 성공! :', this.$store.state.token.loggedIn)
+      localStorage.removeItem('username'); // 로컬 스토리지에서 username 제거
+      console.log('로그아웃 확인:', this.$store.state.token.loggedIn, this.$store.state.token.username, this.$store.state.token.token)
     },
   }
 }
