@@ -76,9 +76,12 @@ export default {
                 localStorage.setItem('username', this.username)
 
                 // 홈으로 이동
-                this.$router.push({name: 'home'})
+                const currentPageName = this.$route.name;
+                if (currentPageName !== 'home') {
+                  // Redirect to the home page
+                  this.$router.push({ name: 'home' });
+                }
             } 
-
         } catch(error) {
             this.loginError = true
             console.log(error)

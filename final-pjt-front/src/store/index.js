@@ -7,6 +7,7 @@ import community from './modules/community'
 import moviedetail from './modules/moviedetail'
 import searchmovies from './modules/searchmovies'
 import token from './modules/token'
+import userInfo from './modules/userInfo'
 
 Vue.use(Vuex)
 
@@ -26,6 +27,7 @@ export default new Vuex.Store({
     community,
     moviedetail,
     searchmovies,
-    token
+    token,
+    userInfo
   }
 })

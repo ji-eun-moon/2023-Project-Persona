@@ -23,7 +23,7 @@
           </ul>
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <router-link class="nav-link" :to="{ name: 'profile' }">Profile</router-link>
+              <router-link class="nav-link" :to="{ name: 'profile', params: { username: $store.state.token.username }}">Profile</router-link>
             </li>
             <li class="nav-item">
               <router-link class="nav-link" :to="{ name: 'LoginView' }" v-if="!$store.state.token.loggedIn">login</router-link>
