@@ -18,6 +18,9 @@ const community = {
       axios({
         method: 'get',
         url: `${API_URL}/api/v1/articles/`,
+        headers: {
+          Authorization: `Token ${context.rootState.token.token}`
+        }
       })
       .then(res =>
         // console.log(res,context)
