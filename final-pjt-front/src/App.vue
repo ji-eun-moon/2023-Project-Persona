@@ -25,6 +25,10 @@
             <li class="nav-item">
               <router-link class="nav-link" :to="{ name: 'profile' }">Profile</router-link>
             </li>
+            <li class="nav-item">
+              <router-link class="nav-link" :to="{ name: 'LoginView' }">login</router-link>
+            </li>
+            <button @click="logout">logout</button>
           </ul>
         </div>
       </div>
@@ -32,6 +36,29 @@
     <router-view/>
   </div>
 </template>
+
+<script>
+import { mapActions } from 'vuex';
+
+export default {
+  components: {
+  },
+  created() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      this.$store.commit('setToken', token);
+    }
+  },
+  methods : {
+    ...mapActions(['removeLoggedIn']),
+    logout() {
+      this.removeLoggedIn(); // Vuex에서 로그인 정보 제거
+      localStorage.removeItem('token'); // 로컬 스토리지에서 토큰 제거
+      console.log('false 이면 로그아웃 성공! :', this.$store.state.token.loggedIn)
+    },
+  }
+}
+</script>
 
 <style>
 body {
