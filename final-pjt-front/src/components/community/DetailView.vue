@@ -1,31 +1,44 @@
 <template>
   <div>
-    <h1>Detail</h1>
-    <p>글 번호: {{ article?.id }}</p>
-    <p>제목: {{ article?.title }}</p>
-    <p>내용: {{ article?.content }}</p>
-    <p>작성시간: {{ formatDateTime(article.created_at) }}</p>
-    <p>수정시간: {{ formatDateTime(article.updated_at) }}</p>
+    <h1 class="movie" style="text-align: left; margin-left: 10px;">Detail</h1>
+    <p class="movie" style="text-align: left; margin-left: 10px;">글 번호: {{ article?.id }}</p>
+    <p class="movie" style="text-align: left; margin-left: 10px;">제목: {{ article?.title }}</p>
+    
+    <p class="movie" style="text-align: left; margin-left: 10px;">{{ article.username }} | {{ formatDateTime(article.created_at) }}</p>
+    <p class="movie" style="text-align: left; margin-left: 10px;">수정시간: {{ formatDateTime(article.updated_at) }}</p>
 
-    <button @click="updateArticleBtn">수정</button>
-    <button @click="deleteArticle">삭제</button>
+    <hr>
+    <div class="content">
+      <p>{{ article?.content }}</p>
+    </div>
+    
+    <br>
+    <div class="actions">
+      <button @click="updateArticleBtn" class="update-btn me-1">수정</button>
+      <button @click="deleteArticle" class="delete-btn">삭제</button>
+    </div>
+    
+    <hr>
+    <div class="comment-box">
+      <form @submit.prevent="createComment">
 
+        <label for="content"></label>
+        <textarea id="content" cols="30" rows="5" v-model="commentContent" placeholder="댓글을 입력하세요"></textarea><br>
+
+        <button type="submit">댓글 작성</button>
+      </form>
+    </div>
     <br>
     <hr>
-    <form @submit.prevent="createComment">
 
-      <label for="content">댓글 내용: </label>
-      <textarea id="content" cols="30" rows="5" v-model="commentContent"></textarea><br>
-
-      <button type="submit">댓글 작성</button>
-    </form>
-
-    <div v-for="comment in commentList" :key="comment.id" >
-      <p>{{ comment.username }}</p>
-      <p>{{ comment.content }}</p>
-      <p>{{ formatDateTime(comment.created_at) }}</p>
-      
+    <div class="comment-list">
+      <div v-for="(comment,index) in commentList" :key="`${comment.id}-${index}`" class="comment-item">
+      <p class="comment-username">{{ comment.username }}</p>
+      <p class="comment-datetime">{{ formatDateTime(comment.created_at) }}</p>
+      <p class="comment-content">{{ comment.content }}</p>
+      </div>
     </div>
+    
   </div>
 </template>
 
@@ -38,7 +51,7 @@ export default {
   name: 'DetailView',
   data() {
     return {
-      article: null,
+      article: '',
       commentContent: '',
       commentList: []
     }
@@ -84,11 +97,12 @@ export default {
           content: this.commentContent,
         }
         await axios.post(`${API_URL}/api/v1/articles/${this.article.id}/comments/`,data,config)
+        this.commentContent = ''
         await this.getCommentList()
       } catch (error) {
         console.error('Failed to create comment:', error)
       }
-      this.commentContent = ''
+      // this.commentContent = ''
     },
     async getCommentList() {
       try {
@@ -98,7 +112,7 @@ export default {
             Authorization: `Token ${token}`,
           },
         }
-        const response = await axios.get(`${API_URL}/api/v1/articles/${this.article.id}/comments/`,config)
+        const response = await axios.get(`${API_URL}/api/v1/articles/${this.$route.params.id}/comments/`,config)
         this.commentList = response.data
         console.log(this.commentList)
       } catch (error) {
@@ -113,5 +127,91 @@ export default {
 </script>
 
 <style>
+  .comment-box {
+    border: 1px solid white;
+    padding: 10px;
+    margin-top: 20px;
+    border-radius: 10px;
+    /* background-color: #f5f5f5af; */
+  }
+  .comment-box label {
+    font-weight: bold;
+  }
+  .comment-box textarea {
+    width: 100%;
+    resize: vertical;
+    padding: 5px;
+    border-radius: 10px;
+    background-color: antiquewhite;
+  }
+  .comment-box button {
+    background-color: darkgray;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 15px;
+  }
+  .comment-box button:hover {
+    background-color: #45a049;
+  }
+  .comment-list {
+    margin-top: 20px;
+  }
+  .comment-item {
+    /* background-color: #f9f9f9; */
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid white;
+    color: white;
 
+  }
+  .comment-username {
+    text-align: left;
+    margin-bottom: 5px;
+    color: white;
+    font-weight: bold;
+  }
+  .comment-datetime {
+    text-align: left;
+    margin-bottom: 5px;
+    color: white;
+    font-size: 12px;
+  }
+  .comment-content {
+    text-align: left;
+    margin-bottom: 0;
+    color: white;
+    font-size: 20px;
+  }
+  .content {
+    text-align: left;
+    margin-left: 10px;
+    margin-bottom: 20px;
+    font-size: 18px;
+    line-height: 1.5;
+    color: white;
+  }
+  .actions {
+    text-align: right;
+  }
+  .update-btn {
+    background-color:darkgrey;
+    color: white;
+    border:none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 15px;
+    font-size: 14px
+  }
+  .delete-btn {
+    background-color:darkgrey;
+    color: white;
+    border:none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 15px;
+    font-size: 14px
+  }
 </style>
