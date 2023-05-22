@@ -34,7 +34,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['saveToken']),
+    ...mapActions(['saveToken', 'saveUsername']),
     async signUp() {
       if (this.password1 !== this.password2) {
         alert('비밀번호가 일치하지 않습니다.')
@@ -61,13 +61,17 @@ export default {
                 password: this.password,
             })
             if (response.data) {
-                // console.log(response.data)
+                console.log(response.data)
                 this.TOKEN = response.data.key
+                localStorage.setItem('token', this.TOKEN); // 로컬 스토리지에 토큰 저장
                 // token 정보 store에 저장
                 this.saveToken(this.TOKEN)
                 // 로그인 상태 변경
                 this.$store.commit("setLoggedIn", true);
-                console.log(this.$store.state.token.loggedIn)
+                console.log('true이면 로그인 성공! :', this.$store.state.token.loggedIn)
+                // username store에 저장
+                this.saveUsername(this.username)
+                console.log('username :', this.$store.state.token.username)
             } 
 
         } catch(error) {
