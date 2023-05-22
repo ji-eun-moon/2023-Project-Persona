@@ -24,29 +24,48 @@ export default {
     }
   },
   methods: {
-    createArticle() {
-      const title = this.title
-      const content = this.content
+    async createArticle() {
+      // const title = this.title
+      // const content = this.content
 
-      if (!title) {
+      try {
+        const token = this.$store.state.token.token 
+        const config = {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        }
+        const data = {
+          title: this.title,
+          content: this.content,
+        }
+        await axios.post(`${API_URL}/api/v1/articles/`, data, config)
+        await this.$router.push({name:'community'})
+      } catch (error) {
+        console.log('Failed to create article list: ', error)
+      }
+
+      if (!this.title) {
         alert('제목을 입력해 주세요')
         return 
       }
-      else if (!content) {
+      else if (!this.content) {
         alert('내용을 입력해 주세요')
         return 
       }
-      
-      axios({
-        method: 'post',
-        url: `${API_URL}/api/v1/articles/`,
-        data: {title,content}
-      })
-      .then(()=> {
-        // console.log(res)
-        this.$router.push({name:'community'})
-      })
-      .catch(err => console.log(err))
+      // axios({
+      //   method: 'post',
+      //   url: `${API_URL}/api/v1/articles/`,
+      //   data: {title,content},
+      //   headers: {
+      //     Authorization: `Token ${this.$store.state.token.token}`,
+      //   },
+      // })
+      // .then(()=> {
+      //   // console.log(res)
+      //   this.$router.push({name:'community'})
+      // })
+      // .catch(err => console.log(err))
     }
   }
 }

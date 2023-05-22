@@ -4,6 +4,7 @@
     <!-- <p>{{ article.title }}</p> -->
     <!-- <p>작성자 : {{ article.username }}</p> -->
     <router-link :to="{ name: 'DetailView', params: {id: article.id } }">{{ article.title }}</router-link>
+    <p>{{ article.username }}</p>
     <hr>
   </div>
 </template>
