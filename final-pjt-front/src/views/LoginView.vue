@@ -35,23 +35,23 @@ export default {
   },
   methods: {
     ...mapActions(['saveToken', 'saveUsername']),
-    async signUp() {
-      if (this.password1 !== this.password2) {
-        alert('비밀번호가 일치하지 않습니다.')
-        return 
-      }
-      try {
-        const response = await axios.post(this.URL + 'accounts/signup/', {
-          username: this.username,
-          password1: this.password1,
-          password2: this.password2,
-        })
-        console.log(response.data)
-        this.TOKEN = response.data.key
-      } catch(error) {
-        console.log(error)
-      }
-    },
+    // async signUp() {
+    //   if (this.password1 !== this.password2) {
+    //     alert('비밀번호가 일치하지 않습니다.')
+    //     return 
+    //   }
+    //   try {
+    //     const response = await axios.post(this.URL + 'accounts/signup/', {
+    //       username: this.username,
+    //       password1: this.password1,
+    //       password2: this.password2,
+    //     })
+    //     console.log(response.data)
+    //     this.TOKEN = response.data.key
+    //   } catch(error) {
+    //     console.log(error)
+    //   }
+    // },
     async login() {
         try {
             // console.log(this.username)
@@ -61,17 +61,22 @@ export default {
                 password: this.password,
             })
             if (response.data) {
-                console.log(response.data)
+                // console.log(response.data)
                 this.TOKEN = response.data.key
-                localStorage.setItem('token', this.TOKEN); // 로컬 스토리지에 토큰 저장
-                // token 정보 store에 저장
-                this.saveToken(this.TOKEN)
-                // 로그인 상태 변경
-                this.$store.commit("setLoggedIn", true);
-                console.log('true이면 로그인 성공! :', this.$store.state.token.loggedIn)
-                // username store에 저장
-                this.saveUsername(this.username)
-                console.log('username :', this.$store.state.token.username)
+
+                // 로그인 정보 store에 저장
+                this.saveToken(this.TOKEN) // token
+                this.$store.commit("setLoggedIn", true); // 로그인 상태
+                this.saveUsername(this.username) // username
+                console.log('로그인 확인:',this.$store.state.token.username, this.$store.state.token.loggedIn, this.$store.state.token.token)
+
+
+                // 로컬스토리지에 토큰과 username 저장 - 새로고침해도 로그인 유지
+                localStorage.setItem('token', this.TOKEN);
+                localStorage.setItem('username', this.username)
+
+                // 홈으로 이동
+                this.$router.push({name: 'home'})
             } 
 
         } catch(error) {

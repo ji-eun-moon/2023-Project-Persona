@@ -9,7 +9,7 @@ const token = {
     mutations: {
       setToken(state, token) {
         state.token = token;
-        console.log('token:', state.token);
+        // console.log('token:', state.token);
       },
       setLoggedIn(state, value) {
         state.loggedIn = value;

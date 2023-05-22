@@ -2,6 +2,7 @@ import SignUpView from '../views/SignUpView'
 import LoginView from '../views/LoginView'
 
 export default [
+
   {
     path: '/signup',
     name:'SignUpView',
@@ -10,7 +11,7 @@ export default [
   {
     path: '/login',
     name: 'LoginView',
-    component: LoginView 
+    component: LoginView,
   }
 
 ]
