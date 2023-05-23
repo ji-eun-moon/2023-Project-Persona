@@ -12,6 +12,7 @@ from rest_framework import status
 from django.shortcuts import get_object_or_404, get_list_or_404
 from .serializers import ArticleListSerializer, ArticleSerializer, CommentSerializer
 from .models import Article, Comment
+from django.db.models import Count
 
 
 
@@ -110,3 +111,9 @@ def article_like(request, article_pk):
             article.like_users.add(user)
             serializer = ArticleSerializer(article)
             return Response(serializer.data)
+
+@api_view(['GET'])
+def article_top(request):
+    articles = Article.objects.annotate(like_count=Count('like_users')).order_by('-like_count')[:5]
+    serializer = ArticleListSerializer(articles, many=True)
+    return Response(serializer.data)
