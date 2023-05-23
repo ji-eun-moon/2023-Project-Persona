@@ -13,6 +13,7 @@
 
 
 <script>
+import { eventBus } from '@/event-bus';
 import axios from 'axios'
 const API_KEY = 'ec7cb21d2c86952874cdb3ff92cd1dfd';
 
@@ -74,7 +75,8 @@ export default {
         // 부캐 정보를 상태 정보에 저장
         this.$store.dispatch('saveActor', actor);
         alert(`나의 부캐가 '${actor.name}'으로 저장되었습니다!`)
-        console.log(this.$store.state.userInfo.actor)
+        eventBus.$emit('refresh-app');
+        // console.log(this.$store.state.userInfo.actor)
       } catch (error) {
         console.error('이미지 업로드 중 오류 발생:', error);
       }

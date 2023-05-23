@@ -100,7 +100,8 @@ export default {
       localStorage.removeItem('token'); // 로컬 스토리지에서 토큰 제거
       localStorage.removeItem('username'); // 로컬 스토리지에서 username 제거
       this.loginShow = false
-      this.refresh(); // 페이지 새로고침
+      this.$router.push({name:'main'})
+      this.refresh();
       console.log('로그아웃 확인:', this.$store.state.token.loggedIn, this.$store.state.token.username, this.$store.state.token.token)
     },
     getProfileImageURL(userInfo) {
