@@ -64,7 +64,7 @@
             <p class="review-content movie fs-5">{{ review.content }}</p>
             <div class="review-meta d-flex me-3 mt-3">
               <div class="d-flex me-3">
-                <p class="review-username review-content movie me-3">{{ review.username }}</p>
+                <p class="review-username review-content movie me-3 cursor-pointer" @click="goToUserProfile(review.username)">{{ review.username }}</p>
                 <p class="movie">{{ formatDateTime(review.created_at) }}</p>
               </div>
               <div class="d-flex justify-content-end" v-if="review.username === username">
@@ -333,7 +333,10 @@ export default {
       } catch (error) {
         console.error('이미지 업로드 중 오류 발생:', error);
       }
-    }
+    },
+    goToUserProfile(username) {
+      this.$router.push(`/profile/${username}`);
+    },
   },
 };
 </script>
