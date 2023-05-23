@@ -58,7 +58,7 @@ def article_detail(request, article_pk):
 def comment_list(request,article_pk):
     if request.method == 'GET':
         # comments = Comment.objects.all()
-        comments = get_list_or_404(Comment,pk=article_pk)
+        comments = get_list_or_404(Comment,article_id=article_pk)
         # comments = Comment.objects.filter(article=article_pk)
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)
@@ -90,11 +90,23 @@ def comment_detail(request, comment_pk):
             return Response(serializer.data)
 
 
-# @api_view(['POST'])
-# def comment_create(request, article_pk):
-#     # article = Article.objects.get(pk=article_pk)
-#     article = get_object_or_404(Article, pk=article_pk)
-#     serializer = CommentSerializer(data=request.data)
-#     if serializer.is_valid(raise_exception=True):
-#         serializer.save(article=article)
-#         return Response(serializer.data, status=status.HTTP_201_CREATED)
+@api_view(['POST','GET'])
+@permission_classes([IsAuthenticated])
+def article_like(request, article_pk):
+    if request.method == 'GET':
+        article = get_object_or_404(Article, id=article_pk)
+        user = request.user
+        is_liked = article.like_users.filter(pk=user.pk).exists()
+        return Response({'isLiked': is_liked, 'likeCount': article.like_users.count()})
+    
+    elif request.method == 'POST':
+        article = get_object_or_404(Article, id=article_pk)
+        user = request.user
+        if article.like_users.filter(pk=user.pk).exists():
+            article.like_users.remove(user)
+            serializer = ArticleSerializer(article)
+            return Response(serializer.data)
+        else:
+            article.like_users.add(user)
+            serializer = ArticleSerializer(article)
+            return Response(serializer.data)
