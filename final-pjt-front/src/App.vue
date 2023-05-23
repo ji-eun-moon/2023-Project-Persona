@@ -26,10 +26,13 @@
               </button>
               <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
                 <img :src="getProfileImageURL(userInfo)" alt="userInfo.username" class="my-profile-image mb-3">
-                  <div class="d-flex align-items-center mypage-itmes">
+                  <div class="d-flex align-items-center mypage-items">
                     <!-- <router-link class="nav-link c-yellow" :to="{ name: 'LoginView' }" v-if="!$store.state.token.loggedIn">login</router-link> -->
                     <div>
                       <button @click="loginShow=true" class="btn btn-outline-dark" v-if="!$store.state.token.loggedIn">LOGIN</button>
+                    </div>
+                    <div v-if="$store.state.token.loggedIn">
+                      <h3 class="mb-3">Hello, {{this.$store.state.token.username}}</h3>
                     </div>
                     <div>
                       <router-link class="profile-link" :to="{ name: 'profile', params: { username: $store.state.token.username }}" v-if="$store.state.token.loggedIn">나의 프로필 보기</router-link>
@@ -151,6 +154,7 @@ nav a.router-link-exact-active {
 
 .dropdown-menu {
   padding: 30px;
+  border-radius: 20px;
 }
 
 .my-profile-image {
@@ -160,7 +164,7 @@ nav a.router-link-exact-active {
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.3);
 }
 
-.mypage-itmes {
+.mypage-items {
   flex-direction: column;
 }
 </style>
