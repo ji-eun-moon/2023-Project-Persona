@@ -1,12 +1,12 @@
 <template>
   <div>
     <h1>게시글 작성</h1>
-    <form @submit.prevent="createArticle">
-      <label for="title">제목: </label>
-      <input type="text" id="title" v-model.trim="title"><br>
-      <label for="content">내용: </label>
-      <textarea id="content" cols="30" rows="10" v-model="content"></textarea><br>
-      <input type="submit" id="submit">
+    <form @submit.prevent="createArticle" class="article-form">
+      <label for="title" class="form-label">제목: </label>
+      <input type="text" id="title" v-model.trim="title" class="form-input"  placeholder="제목을 입력하세요"><br>
+      <label for="content" class="form-label">내용: </label>
+      <textarea id="content" cols="30" rows="10" v-model="content" class="form-textarea"  placeholder="내용을 입력하세요"></textarea><br>
+      <input type="submit" id="submit" class="form-submit">
     </form>
   </div>
 </template>
@@ -72,5 +72,36 @@ export default {
 </script>
 
 <style>
-
+  .article-form {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  .form-label {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: aliceblue;
+  }
+  .form-input,
+  .form-textarea {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid aliceblue;
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+  .form-submit {
+    padding: 8px 16px;
+    font-size: 18px;
+    background-color: #4CAF50;
+    color: aliceblue;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  .form-submit:hover {
+    background-color: #45a049;;
+  }
 </style>

@@ -3,6 +3,7 @@
     <td>{{ index+1 }}</td>
     <td><router-link :to="{ name:'DetailView', params:{ id:article.id } }" class="title-link">{{ article.title }}</router-link></td>
     <td>{{ article.username }}</td>
+    <!-- <td>{{ article.created_at }}</td> -->
     <td>{{ formatDateTime(article.created_at) }}</td>
   </tr>
 </template>
@@ -35,13 +36,13 @@ export default {
     width: 10%;
   }
   .article-list-item td:nth-child(2) {
-    width: 60%;
+    width: 50%;
   }
   .article-list-item td:nth-child(3) {
-    width: 20%;
+    width: 10%;
   }
   .article-list-item td:last-child {
-    width: 10px;
+    width: 20px;
   }
   .title-link {
     text-decoration-line: none;
