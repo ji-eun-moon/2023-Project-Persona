@@ -12,7 +12,7 @@
           </a>
         </div>
         <div class="d-flex justify-content-center">
-          <p style="color:white;" class="movie mt-2">이 영화를 담은 사람 : {{likeCount}} 명</p>
+          <p v-if="this.$store.state.token.loggedIn" style="color:white;" class="movie mt-2">이 영화를 담은 사람 : {{likeCount}} 명</p>
         </div>
     </div>
     <div class="movie-info">
@@ -30,10 +30,11 @@
       <h4 class="movie">{{ movieDetail.tagline }}</h4>
       <h6 class="movie movie-overview">{{ movieDetail.overview }}</h6>
       <h3 class="movie-title mt-5 mb-2">출연진</h3>
-      <p class="movie"> 맘에 드는 배우가 있으면 부캐로 골라보세요! </p>
+      <p class="movie" v-if="isLoggedIn"> 맘에 드는 배우가 있으면 부캐로 골라보세요! </p>
+      <p class="movie" v-else>로그인 하고 부캐를 골라보세요!</p>
       <div class="cast-images d-flex justify-content-center">
         <div v-for="(cast, index) in movieCast" :key="index" class="cast-profile">
-          <img :src="getProfileImageUrl(cast.profile_path)" :alt="cast.name" class="cast-image cursor-pointer" @click="saveProfileImage(cast)"/>
+          <img :src="getProfileImageUrl(cast.profile_path)" :alt="cast.name" class="cast-image cursor-pointer" @click="saveProfileImage(cast)" />
           <span class="cast-name movie-title">{{ cast.name }}</span>
         </div>
       </div>
@@ -305,6 +306,11 @@ export default {
       } 
     },
     async saveProfileImage(actor) {
+      if (!this.isLoggedIn) {
+        alert('로그인이 필요한 서비스입니다.');
+        this.showModal = true;
+        return;
+      }
       try {
         const token = this.$store.state.token.token
         const username = this.$store.state.token.username
@@ -443,9 +449,9 @@ export default {
 }
 
 .login-modal-body {
-  max-height: 300px; /* 원하는 높이로 조정하세요 */
+  max-height: 450px; 
   overflow-y: auto;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 .movie-review {

@@ -1,12 +1,10 @@
 <template>
   <div id="app">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand navbar-dark bg-dark">
       <div class="container">
-        <router-link class="navbar-brand" :to="{ name: 'home' }">logo</router-link>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
+
+        <!-- <router-link class="navbar-brand" :to="{ name: 'home' }">logo</router-link> -->
+          <i class="navbar-brand bi bi-camera-reels-fill"></i>
           <ul class="navbar-nav movie-title">
             <li class="nav-item">
               <router-link class="nav-link" :to="{ name: 'home' }">Home</router-link>
@@ -15,30 +13,34 @@
               <router-link class="nav-link" :to="{ name: 'movies' }">Movies</router-link>
             </li>
             <li class="nav-item">
-              <router-link class="nav-link" :to="{ name: 'community' }">Community</router-link>
-            </li>
-            <li class="nav-item">
-              <router-link class="nav-link" :to="{ name: 'SignUpView' }">Sign Up</router-link>
+              <router-link class="nav-link" :to="{ name: 'community' }" v-if="$store.state.token.loggedIn">Community</router-link>
+              <a class="nav-link cursor-pointer" @click="openLoginModal" v-else>Community</a>
             </li>
           </ul>
+
+
           <ul class="navbar-nav ms-auto movie-title align-items-center">
             <div class="dropdown">
-              <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+              <button class="btn btn-dark dropdown-toggle movie-title" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                 MyPage
               </button>
               <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
                 <img :src="getProfileImageURL(userInfo)" alt="userInfo.username" class="my-profile-image mb-3">
-                  <div>
+                  <div class="d-flex align-items-center mypage-itmes">
                     <!-- <router-link class="nav-link c-yellow" :to="{ name: 'LoginView' }" v-if="!$store.state.token.loggedIn">login</router-link> -->
-                    <p @click="loginShow=true" class="cursor-pointer" v-if="!$store.state.token.loggedIn">LOGIN</p>
-                    <router-link class="profile-link" :to="{ name: 'profile', params: { username: $store.state.token.username }}">나의 프로필 보기</router-link>
+                    <div>
+                      <button @click="loginShow=true" class="btn btn-outline-dark" v-if="!$store.state.token.loggedIn">LOGIN</button>
+                    </div>
+                    <div>
+                      <router-link class="profile-link" :to="{ name: 'profile', params: { username: $store.state.token.username }}" v-if="$store.state.token.loggedIn">나의 프로필 보기</router-link>
+                    </div>
+                    <button @click="logout" v-if="$store.state.token.loggedIn" class="btn btn-outline-danger mt-3">LOGOUT</button>
                   </div>
-                <button @click="logout" v-if="$store.state.token.loggedIn" class="btn btn-outline-danger">logout</button>
               </div>
             </div>
           </ul>
+
         </div>
-      </div>
     </nav>
 
 
@@ -110,7 +112,11 @@ export default {
     },
     refresh() {
       window.location.reload();
-    }
+    },
+    openLoginModal() {
+      alert('로그인이 필요한 서비스입니다.')
+      this.loginShow = true;
+    },
   },
 
 }
@@ -139,7 +145,7 @@ nav a {
 }
 
 nav a.router-link-exact-active {
-  color: #42b983 !important;
+  color: aliceblue !important;
 }
 
 .dropdown-menu {
@@ -153,4 +159,7 @@ nav a.router-link-exact-active {
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.3);
 }
 
+.mypage-itmes {
+  flex-direction: column;
+}
 </style>
