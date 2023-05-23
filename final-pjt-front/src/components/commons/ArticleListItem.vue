@@ -1,22 +1,25 @@
 <template>
   <tr class="article-list-item">
-    <td>{{ article.id }}</td>
-    <td><router-link :to="{ name:'DetailView', params:{ id:article.id } }">{{ article.title }}</router-link></td>
+    <td>{{ index+1 }}</td>
+    <td><router-link :to="{ name:'DetailView', params:{ id:article.id } }" class="title-link">{{ article.title }}</router-link></td>
     <td>{{ article.username }}</td>
+    <td>{{ formatDateTime(article.created_at) }}</td>
   </tr>
-  <!-- <div>
-    <h5>{{ article.id }}</h5>
-    <router-link :to="{ name: 'DetailView', params: {id: article.id } }">{{ article.title }}</router-link>
-    <p>{{ article.username }}</p>
-    <hr>
-  </div> -->
 </template>
 
 <script>
+import moment from 'moment'
+
 export default {
   name: 'ArticleListItem',
   props: {
     article: Object,
+    index: Number,
+  },
+  methods: {
+    formatDateTime(dateTime) {
+      return moment(dateTime).format('YYYY-MM-DD')
+    }
   }
 }
 </script>
@@ -32,9 +35,16 @@ export default {
     width: 10%;
   }
   .article-list-item td:nth-child(2) {
-    width: 70%;
+    width: 60%;
+  }
+  .article-list-item td:nth-child(3) {
+    width: 20%;
   }
   .article-list-item td:last-child {
-    width: 20px;
+    width: 10px;
+  }
+  .title-link {
+    text-decoration-line: none;
+    color: aliceblue;
   }
 </style>
