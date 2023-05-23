@@ -1,6 +1,5 @@
 <template>
 <div class="table-container">
-  <h5>MovieReviews</h5> 
   <div class="create">
     <router-link :to="{ name:'CreateView' }">
     <button class="create-btn">글쓰기</button>
@@ -44,8 +43,7 @@ export default {
       ...mapState ({
         articles: state => state.community.articles,
       })
-    }
-    
+    },    
 }
 </script>
 

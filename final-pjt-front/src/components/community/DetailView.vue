@@ -3,20 +3,19 @@
     <div class="detail-box">
       <!-- <p class="movie" style="text-align: left; margin-left: 10px;">No. {{ article?.id }}</p> -->
       <p class="movie" style="text-align: left; margin-left: 10px;">제목: {{ article?.title }}</p>
-    
       <p class="movie" style="text-align: left; margin-left: 10px;">{{ article.username }} | {{ formatDateTime(article.created_at) }}</p>
       <p class="movie" style="text-align: left; margin-left: 10px;">마지막 작성시간: {{ formatDateTime(article.updated_at) }}</p>
     </div>
+    <!-- <div class="button-container"> -->
+      <button class="like-btn right-aligned" :class="{ liked: isLiked }" @click="toggleLike(article.id)">
+        <div class="hand">
+          <div class="thumb"></div>
+        </div>
+        <span>Like <span>{{ likeCount }}</span></span>
+      </button>
+    <!-- </div> -->
 
     <hr>
-
-    <button class="like-btn" :class="{ liked: isLiked }" @click="toggleLike(article.id)">
-      <div class="hand">
-        <div class="thumb"></div>
-      </div>
-      <span>Like <span>{{ likeCount }}</span></span>
-    </button>
-    
 
     <!-- <div class="like-actions">
       <a class="btn-thumb" @click="toggleLike(article.id)">
@@ -50,9 +49,12 @@
 
     <div class="comment-list">
       <div v-for="(comment,index) in commentList" :key="`${comment.id}-${index}`" class="comment-item">
-      <p class="comment-username">{{ comment.username }}</p>
-      <p class="comment-datetime">{{ formatDateTime(comment.created_at) }}</p>
-      <p class="comment-content">{{ comment.content }}</p>
+        <p class="comment-username">{{ comment.username }}</p>
+        <p class="comment-datetime">{{ formatDateTime(comment.created_at) }}</p>
+        <p class="comment-content">{{ comment.content }}</p>
+        <div class="comment-delete-container">
+          <button @click="deleteComment(comment.id)" class="comment-delete">삭제</button>
+        </div>
       </div>
     </div>
     
@@ -137,6 +139,16 @@ export default {
       } catch (error) {
         console.error('Failed to get comment list:', error)
       }
+    },
+    deleteComment(commentId) {
+      axios({
+        method:'delete',
+        url: `${API_URL}/api/v1/comments/${commentId}/`,
+      })
+      .then(() => {
+        location.reload()
+      })
+      .catch(err => console.log(err))
     },
     async toggleLike(articleId) {
       const previousLiked = this.isLiked;
@@ -265,7 +277,7 @@ export default {
   }
   .update-btn {
     background-color:darkgrey;
-    color: white;
+    color: aliceblue;
     border:none;
     padding: 5px 10px;
     cursor: pointer;
@@ -274,15 +286,33 @@ export default {
   }
   .delete-btn {
     background-color:darkgrey;
-    color: white;
+    color: aliceblue;
     border:none;
     padding: 5px 10px;
     cursor: pointer;
     border-radius: 15px;
-    font-size: 14px
+    font-size: 14px;
+  }
+  .comment-delete {
+    background-color: crimson;
+    color: aliceblue;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 10px;
+    font-size: 14px;
+  }
+  .comment-delete-container {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .actions .update-btn:hover {
+    background-color:#275EFE;
+  }
+  .actions .delete-btn:hover {
+    background-color:crimson;
   }
   .like-actions {
-
     background-color: aliceblue;
     width: 70px;
     height: 70px;
@@ -295,6 +325,13 @@ export default {
     color:rgb(64, 47, 218);
     cursor: pointer;
     margin-left: 10px;
+  }
+  /* .button-container {
+    margin-left: auto;
+    margin-right: 10px;
+  } */
+  .right-aligned {
+    margin-left: auto;
   }
 
   .like-btn {

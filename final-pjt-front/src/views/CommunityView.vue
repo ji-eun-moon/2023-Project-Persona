@@ -1,8 +1,14 @@
 <template>
   <div class="container">
     <h1>Community</h1>
-    <TopArticles />
-    <MovieReviews />
+    <button @click="showTopArticles">TopArticles</button>
+    <button @click="showMovieReviews">MovieReviews</button>
+    <div v-if="displayTopArticles">
+      <TopArticles />
+    </div>
+    <div v-if="displayMovieReviews">
+      <MovieReviews />
+    </div>
   </div>
 </template>
 
@@ -16,6 +22,12 @@ export default {
         TopArticles,
         MovieReviews,
     },
+    data() {
+      return {
+        displayTopArticles: false,
+        displayMovieReviews: false,
+      }
+    },
     computed: {
     },
     created() {
@@ -24,6 +36,14 @@ export default {
     methods: {
       getArticles() {
         this.$store.dispatch('getArticles')
+      },
+      showTopArticles() {
+        this.displayTopArticles = true 
+        this.displayMovieReviews = false
+      },
+      showMovieReviews() {
+        this.displayTopArticles = false
+        this.displayMovieReviews = true
       }
     }
 }
