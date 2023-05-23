@@ -8,6 +8,6 @@ from django.conf import settings
 
 class User(AbstractUser):
     followings = models.ManyToManyField('self', symmetrical=False, related_name='followers')
-    profile_img = models.TextField(blank=True)
-    character = models.IntegerField(blank=True)
+    profile_img = models.TextField(blank=True, null=True)
+    character = models.IntegerField(blank=True, null=True)
     # genres = models.ManyToManyField(Genre, blank=True)

@@ -65,25 +65,12 @@ def movie_review(request, movie_pk):
             movie.save()
             return Response(serializer.data, status=201)
     
-@api_view(['PUT', 'DELETE'])
+@api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def reviews_update(request, movie_pk, review_pk):
     movie = get_object_or_404(Movie, movie_id=movie_pk)
-
-    if request.method == 'PUT':
-        if request.user == review.user:
-            review = get_object_or_404(Review, pk=review_pk)
-            serializer = ReviewSerializer(review, data=request.data)
-            if serializer.is_valid(raise_exception=True):
-                serializer.save()
-                # 영화의 평균 평점 업데이트
-                movie.save()
-                reviews = movie.reviews.all()
-                serializer = ReviewSerializer(reviews, many=True)
-                return Response(serializer.data, status=200)
-    
-    elif request.method == 'DELETE':
-        review = get_object_or_404(Review, pk=review_pk, movie=movie_pk)
+    if request.method == 'DELETE':
+        review = get_object_or_404(Review, pk=review_pk, movie__movie_id=movie_pk)
         if request.user == review.user:
             review.delete()
             # 영화의 평균 평점 업데이트
