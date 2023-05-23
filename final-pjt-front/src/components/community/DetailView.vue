@@ -1,18 +1,35 @@
 <template>
-  <div>
-    <h1 class="movie" style="text-align: left; margin-left: 10px;">Detail</h1>
-    <p class="movie" style="text-align: left; margin-left: 10px;">글 번호: {{ article?.id }}</p>
-    <p class="movie" style="text-align: left; margin-left: 10px;">제목: {{ article?.title }}</p>
+  <div class="container">
+    <div class="detail-box">
+      <!-- <p class="movie" style="text-align: left; margin-left: 10px;">No. {{ article?.id }}</p> -->
+      <p class="movie" style="text-align: left; margin-left: 10px;">제목: {{ article?.title }}</p>
     
-    <p class="movie" style="text-align: left; margin-left: 10px;">{{ article.username }} | {{ formatDateTime(article.created_at) }}</p>
-    <p class="movie" style="text-align: left; margin-left: 10px;">수정시간: {{ formatDateTime(article.updated_at) }}</p>
+      <p class="movie" style="text-align: left; margin-left: 10px;">{{ article.username }} | {{ formatDateTime(article.created_at) }}</p>
+      <p class="movie" style="text-align: left; margin-left: 10px;">마지막 작성시간: {{ formatDateTime(article.updated_at) }}</p>
+    </div>
 
     <hr>
+<!-- 
+    <button class="like-btn">
+      <div class="hand">
+        <div class="thumb"></div>
+      </div>
+      <span>Like<span>{{ likeCount }}</span></span>
+    </button> -->
+    
+
+    <div class="like-actions">
+      <a class="btn-thumb" @click="toggleLike(article.id)">
+        <i class="bi fs-3" :class="isLiked ? 'bi-hand-thumbs-up-fill' : 'bi-hand-thumbs-up'"></i>
+        <!-- <i class="bi fs-3" :class="isLiked ? 'bi-heart-fill' : 'bi-heart'"></i> -->
+      </a>
+      <p>{{ likeCount }}</p>
+    </div>
+
     <div class="content">
       <p>{{ article?.content }}</p>
     </div>
-    
-    <br>
+
     <div class="actions">
       <button @click="updateArticleBtn" class="update-btn me-1">수정</button>
       <button @click="deleteArticle" class="delete-btn">삭제</button>
@@ -53,11 +70,14 @@ export default {
     return {
       article: '',
       commentContent: '',
-      commentList: []
+      commentList: [],
+      isLiked: false,
+      likeCount: 0,
     }
   },
   created() {
     this.getArticleDetail()
+    this.checkLikeStatus(this.$route.params.id)
     this.getCommentList()
   },
   methods: {
@@ -68,7 +88,7 @@ export default {
       })
       .then((res) => {
         // console.log(res)
-        this.article = res.data
+        this.article = res.data 
       })
       .catch(err => console.log(err))
     },
@@ -83,7 +103,7 @@ export default {
       .catch(err => console.log(err))
     },
     updateArticleBtn() {
-      this.$router.push({ name:'UpdateView',parmas:{id:this.article.id}})
+      this.$router.push({ name:'UpdateView',params:{id:this.article.id}})
     },
     async createComment() {
       try {
@@ -102,7 +122,6 @@ export default {
       } catch (error) {
         console.error('Failed to create comment:', error)
       }
-      // this.commentContent = ''
     },
     async getCommentList() {
       try {
@@ -116,9 +135,53 @@ export default {
         this.commentList = response.data
         console.log(this.commentList)
       } catch (error) {
-        console.log('Failed to get comment list:', error)
+        console.error('Failed to get comment list:', error)
       }
     },
+    async toggleLike(articleId) {
+      const previousLiked = this.isLiked;
+      this.isLiked = !previousLiked;
+      try{
+        
+        await this.articleLike(articleId)
+        this.checkLikeStatus(articleId)
+
+      } catch (error) {
+        console.error('Failed to toggle like:', error)
+        this.isLiked = previousLiked;
+      }
+    },
+    async checkLikeStatus(articleId) {
+      try {
+        const token = this.$store.state.token.token; // 토큰 가져오기
+        const config = {
+          headers: {
+            Authorization: `Token ${token}`, // 헤더에 토큰 추가
+          },
+        };
+        const response = await axios.get(`${API_URL}/api/v1/articles/${articleId}/like/`, config);
+        console.log(response.data)
+        this.isLiked = response.data.isLiked; // 좋아요 여부 업데이트
+        this.likeCount = response.data.likeCount; // 좋아요 수 업데이트
+        console.log(this.isLiked, this.likeCount)
+      } catch (error) {
+        console.error('Failed to check like status:', error);
+      }
+    },
+    async articleLike(articleId) {
+      try {
+        const token = this.$store.state.token.token; // 토큰 가져오기
+        const config = {
+          headers: {
+            Authorization: `Token ${token}`, // 헤더에 토큰 추가
+          },
+        };
+        await axios.post(`${API_URL}/api/v1/articles/${articleId}/like/`, null, config);
+      } catch (error) {
+        console.error('Failed to like movie:', error);
+      }
+    },
+
     formatDateTime(dateTime) {
       return moment(dateTime).format('YYYY-MM-DD HH:mm:ss')
     }
@@ -127,6 +190,10 @@ export default {
 </script>
 
 <style>
+  
+  .detail-box {
+    margin-top: 20px;
+  }
   .comment-box {
     border: 1px solid white;
     padding: 10px;
@@ -159,7 +226,6 @@ export default {
     margin-top: 20px;
   }
   .comment-item {
-    /* background-color: #f9f9f9; */
     padding: 10px;
     margin-bottom: 10px;
     border-radius: 5px;
@@ -172,6 +238,7 @@ export default {
     margin-bottom: 5px;
     color: white;
     font-weight: bold;
+    font-size: 12px;
   }
   .comment-datetime {
     text-align: left;
@@ -183,7 +250,7 @@ export default {
     text-align: left;
     margin-bottom: 0;
     color: white;
-    font-size: 20px;
+    font-size: 16px;
   }
   .content {
     text-align: left;
@@ -213,5 +280,20 @@ export default {
     cursor: pointer;
     border-radius: 15px;
     font-size: 14px
+  }
+  .like-actions {
+
+    background-color: aliceblue;
+    width: 70px;
+    height: 70px;
+    padding: 8px;
+    border-radius: 50%;
+    justify-content: flex-end;
+    margin-left: auto;
+  }
+  .like-actions .btn-thumb {
+    color:rgb(64, 47, 218);
+    cursor: pointer;
+    margin-left: 10px;
   }
 </style>

@@ -1,42 +1,39 @@
 <template>
 <div class="table-container">
   <h5>MovieReviews</h5> 
-  <router-link :to="{ name:'CreateView' }">
-  <button>글쓰기</button>
-  </router-link>
+  <div class="create">
+    <router-link :to="{ name:'CreateView' }">
+    <button class="create-btn">글쓰기</button>
+    </router-link>
+  </div>
   
-  <div class="table-responsive">
+  
+  <div>
     <table class="table table-dark table-striped table-hover table-sm">
       <thead>
         <tr>
           <th>No.</th>
           <th>제목</th>
           <th>작성자</th>
+          <th>작성일</th>
         </tr>
       </thead>
       <tbody>
         <ArticleListItem 
-          v-for="article in articles"
+          v-for="(article,index) in articles"
           :key="article.id"
-          :article="article" />
+          :article="article"
+          :index="index" />
       </tbody>
     </table>
   </div>
-  
 </div>
-  <!-- <div>
-    <h5>MovieReviews</h5>
-    <router-link :to="{ name:'CreateView' }">
-      <button>글쓰기</button>
-    </router-link>
-    <ArticleListItem 
-      v-for="article in articles" :key="article.id" :article="article"/>
-  </div> -->
 </template>
 
 <script>
 import ArticleListItem from '@/components/commons/ArticleListItem'
 import { mapState } from 'vuex'
+
 
 export default {
     name: "MovieReviews",
@@ -58,32 +55,38 @@ export default {
     border-collapse: collapse;
     text-align: center;
   }
+  .table-container {
+    display: flex;
+    flex-direction: column;
+  }
+  .create {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+  }
+  .create-btn {
+    padding: 5px 10px;
+    background-color: #2196f3;
+    color: aliceblue;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+  }
   th {
     padding: 10px;
-    border: 1px solid #ddd;
-    background-color: #f5f5f5;
+    border: 1px solid aliceblue;
+    background-color: aliceblue;
     text-align: center;
     color: black;
   }
   td {
     padding: 10px;
-    border: 1px solid #ddd;
+    border: 1px solid aliceblue;
     text-align: center;
   }
   .tr:hover {
-    background-color: #f9f9f9;
+    background-color: aliceblue;
   }
-  .title-link {
-    display: inline-block;
-    max-width: 200px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    color: white;
-    text-decoration: none;
-  }
-  .table-responsive {
-    max-width: 80%;
-    margin: 0 auto;
-  }
+
 </style>
