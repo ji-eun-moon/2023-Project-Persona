@@ -33,7 +33,7 @@
       <p class="movie"> 맘에 드는 배우가 있으면 부캐로 골라보세요! </p>
       <div class="cast-images d-flex justify-content-center">
         <div v-for="(cast, index) in movieCast" :key="index" class="cast-profile">
-          <img :src="getProfileImageUrl(cast.profile_path)" :alt="cast.name" class="cast-image cursor-pointer" @click="saveProfileImage(cast)" />
+          <img :src="getProfileImageUrl(cast.profile_path)" :alt="cast.name" class="cast-image cursor-pointer" @click="saveProfileImage(cast)"/>
           <span class="cast-name movie-title">{{ cast.name }}</span>
         </div>
       </div>
@@ -61,9 +61,14 @@
             <span v-for="(i, index) in 5 - Math.ceil(review.rate)" :key="'empty-' + index" class="bi bi-star c-yellow fs-5"></span>
           </p>
             <p class="review-content movie fs-5">{{ review.content }}</p>
-            <div class="review-meta d-flex">
-              <p class="review-username review-content movie me-3 mt-3">{{ review.username }}</p>
-              <p class="movie mt-3">{{ formatDateTime(review.created_at) }}</p>
+            <div class="review-meta d-flex me-3 mt-3">
+              <div class="d-flex me-3">
+                <p class="review-username review-content movie me-3">{{ review.username }}</p>
+                <p class="movie">{{ formatDateTime(review.created_at) }}</p>
+              </div>
+              <div class="d-flex justify-content-end" v-if="review.username === username">
+                <button class="btn btn-danger btn-sm mb-3 review-del" @click="deleteReview(review.id)" >삭제</button>
+              </div>
             </div>
         </div>
       </div>
@@ -90,6 +95,7 @@ import { mapState } from 'vuex';
 import LoginView from '@/views/LoginView.vue'
 import StarRating from 'vue-star-rating'
 import moment from 'moment';
+import { eventBus } from '@/event-bus';
 
 import axios from 'axios'
 const API_URL = 'http://127.0.0.1:8000'
@@ -110,7 +116,7 @@ export default {
       showModal: false,
       rating: 0,
       content: null,
-      reviewList: []
+      reviewList: [],
     };
   },
   computed: {
@@ -132,12 +138,15 @@ export default {
           }
         }, 0);
     
-    const average = sum / this.reviewList.length;
-    return average.toFixed(1);
-  } else {
-    return 0;
+      const average = sum / this.reviewList.length;
+      return average.toFixed(1);
+    } else {
+      return 0;
+    }
+  },
+  username() {
+    return this.$store.state.token.username
   }
-}
   },
   created() {
     this.$store.dispatch("getMovieDetail", this.movieId);
@@ -259,6 +268,22 @@ export default {
       this.rating = 0
     },
 
+    async deleteReview(reviewId) {
+      try {
+        const token = this.$store.state.token.token; // 토큰 가져오기
+        const config = {
+          headers: {
+            Authorization: `Token ${token}`, // 헤더에 토큰 추가
+          },
+        };
+        await axios.delete(`${API_URL}/api/v1/${this.movieId}/reviews/${reviewId}/`, config);
+        // 한줄평 삭제 후 리뷰 목록을 다시 가져오기
+        await this.getReviewList();
+      } catch (error) {
+        console.error('Failed to delete review:', error);
+      }
+    },
+
     async getReviewList() {
       try {
         const response = await axios.get(`${API_URL}/api/v1/movies/${this.movieId}/reviews/`);
@@ -295,6 +320,10 @@ export default {
 
         // 상태 정보에 저장된 프로필 사진 업데이트 - 바로 이미지 바꾸기 위해서!
         this.$store.dispatch('saveUserProfileImg', response.data.profile_img)
+        // 부캐 정보를 상태 정보에 저장
+        this.$store.dispatch('saveActor', actor);
+        eventBus.$emit('refresh-app');
+        alert(`나의 부캐가 '${actor.name}'으로 저장되었습니다!`)
       } catch (error) {
         console.error('이미지 업로드 중 오류 발생:', error);
       }
@@ -472,5 +501,9 @@ export default {
   display: flex;
   margin-left: auto;
   text-align: right;
+}
+
+.review-del {
+  border-radius: 15px;
 }
 </style>

@@ -1,10 +1,12 @@
 import axios from 'axios';
+const API_KEY = 'ec7cb21d2c86952874cdb3ff92cd1dfd'
 
 const userInfo = {
   state: {
     userProfile: null,
     profileImg: null,
     actorId: null,
+    actor: null,
   },
   getters: {
   },
@@ -16,9 +18,9 @@ const userInfo = {
     setProfileImg(state, profileImg) {
       state.profileImg = profileImg;
     },
-    setCharacter(state, character) {
-      state.character = character;
-    }
+    setActor(state, actor) {
+      state.actor = actor;
+    },
     },
   actions: {
     async fetchUserProfile({ commit }, username) {
@@ -33,9 +35,18 @@ const userInfo = {
     saveUserProfileImg({commit}, profileImg) {
       commit('setProfileImg', profileImg)
     },
-    saveCharacter({commit}, character) {
-      commit('setCharacter', character)
+    saveActor({ commit }, actor) {
+      commit('setActor', actor);
     },
+    async fetchActorDetail({ commit }, actorId) {
+      try {
+        const response = await axios.get(`https://api.themoviedb.org/3/person/${actorId}?api_key=${API_KEY}`);
+        const actorDetail = response.data;
+        commit('setActor', actorDetail);
+      } catch (error) {
+        console.error('배우 세부 정보를 가져오는 중 오류 발생:', error);
+      }
+    }
   },
 }
 

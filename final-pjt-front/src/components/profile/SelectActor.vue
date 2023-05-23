@@ -70,7 +70,11 @@ export default {
 
         // 상태 정보에 저장된 프로필 사진 업데이트 - 바로 이미지 바꾸기 위해서!
         this.$store.dispatch('saveUserProfileImg', response.data.profile_img)
-        this.$store.dispatch('saveCharacter', response.data.character)
+
+        // 부캐 정보를 상태 정보에 저장
+        this.$store.dispatch('saveActor', actor);
+        alert(`나의 부캐가 '${actor.name}'으로 저장되었습니다!`)
+        console.log(this.$store.state.userInfo.actor)
       } catch (error) {
         console.error('이미지 업로드 중 오류 발생:', error);
       }

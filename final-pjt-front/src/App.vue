@@ -7,7 +7,7 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav">
+          <ul class="navbar-nav movie-title">
             <li class="nav-item">
               <router-link class="nav-link" :to="{ name: 'home' }">Home</router-link>
             </li>
@@ -21,29 +21,55 @@
               <router-link class="nav-link" :to="{ name: 'SignUpView' }">Sign Up</router-link>
             </li>
           </ul>
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-              <router-link class="nav-link" :to="{ name: 'profile', params: { username: $store.state.token.username }}">Profile</router-link>
-            </li>
-            <li class="nav-item">
-              <router-link class="nav-link" :to="{ name: 'LoginView' }" v-if="!$store.state.token.loggedIn">login</router-link>
-            </li>
-            <button @click="logout" v-if="$store.state.token.loggedIn">logout</button>
+          <ul class="navbar-nav ms-auto movie-title align-items-center">
+            <div class="dropdown">
+              <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                MyPage
+              </button>
+              <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+                <img :src="getProfileImageURL(userInfo)" alt="userInfo.username" class="my-profile-image mb-3">
+                  <div>
+                    <!-- <router-link class="nav-link c-yellow" :to="{ name: 'LoginView' }" v-if="!$store.state.token.loggedIn">login</router-link> -->
+                    <p @click="loginShow=true" class="cursor-pointer" v-if="!$store.state.token.loggedIn">LOGIN</p>
+                    <router-link class="profile-link" :to="{ name: 'profile', params: { username: $store.state.token.username }}">나의 프로필 보기</router-link>
+                  </div>
+                <button @click="logout" v-if="$store.state.token.loggedIn" class="btn btn-outline-danger">logout</button>
+              </div>
+            </div>
           </ul>
         </div>
       </div>
     </nav>
+
+
+    <div class="modal-container" v-if="loginShow && !this.$store.state.token.loggedIn">
+      <div class="login-modal-content">
+        <div class="login-modal-header">
+          <i class="bi bi-backspace-fill movie me-2 fs-5" @click="loginShow=false"></i>
+          <p class="login-close-button mt-1" @click="loginShow=false">뒤로가기</p>
+        </div>
+        <div class="login-modal-body">
+          <LoginView />
+        </div>
+      </div>
+    </div>
+
     <router-view/>
   </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex';
+import { eventBus } from './event-bus';
+import LoginView from '@/views/LoginView.vue'
 
 export default {
+  name : 'App',
   components: {
+    LoginView
   },
   created() {
+    eventBus.$on('refresh-app', this.refresh)
     const token = localStorage.getItem('token');
     const username = localStorage.getItem('username');
     if (token) {
@@ -51,7 +77,18 @@ export default {
       this.$store.commit('setToken', token);
       this.$store.commit("setLoggedIn", true);
       this.$store.dispatch('saveUsername', username)
+      this.$store.dispatch('fetchUserProfile', username)
       console.log('로그인 유지 확인:',this.$store.state.token.username, this.$store.state.token.loggedIn, this.$store.state.token.token)
+    }
+  },
+  computed: {
+    userInfo() {
+      return this.$store.state.userInfo.userProfile;
+    },
+	},
+  data() {
+    return {
+      loginShow: false,
     }
   },
   methods : {
@@ -60,9 +97,22 @@ export default {
       this.removeLoggedIn(); // Vuex에서 로그인 정보 제거
       localStorage.removeItem('token'); // 로컬 스토리지에서 토큰 제거
       localStorage.removeItem('username'); // 로컬 스토리지에서 username 제거
+      this.loginShow = false
+      this.refresh(); // 페이지 새로고침
       console.log('로그아웃 확인:', this.$store.state.token.loggedIn, this.$store.state.token.username, this.$store.state.token.token)
     },
-  }
+    getProfileImageURL(userInfo) {
+      if (userInfo && userInfo.profile_img ) {
+        return "https://image.tmdb.org/t/p/w185" + userInfo.profile_img;
+      } else {
+        return require("@/assets/default-profile.jpg");
+      }
+    },
+    refresh() {
+      window.location.reload();
+    }
+  },
+
 }
 </script>
 
@@ -71,7 +121,7 @@ body {
   background-color: #1c1d1f;
 }
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Noto Sans KR', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -91,4 +141,16 @@ nav a {
 nav a.router-link-exact-active {
   color: #42b983 !important;
 }
+
+.dropdown-menu {
+  padding: 30px;
+}
+
+.my-profile-image {
+  width: 180px;
+  object-fit: cover;
+  border-radius: 40%;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.3);
+}
+
 </style>
