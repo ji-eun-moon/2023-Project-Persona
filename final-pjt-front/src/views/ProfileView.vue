@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <h1 class="movie-title m-4">{{ isMyProfile ? "나의 프로필" : $route.params.username + "'s 프로필" }}</h1>
-    <UserInfo :username="$route.params.username" class="mb-4" @select-actor="handleActorSelect"/>
+    <UserInfo :username="$route.params.username" class="mb-4" @select-actor="handleActorSelect" @movie-selected="handleMovieSelected"/>
     <LikeMovies :username="$route.params.username" @movie-selected="handleMovieSelected"/>
 
     <div class="modal-container" v-if="showModal==true" >

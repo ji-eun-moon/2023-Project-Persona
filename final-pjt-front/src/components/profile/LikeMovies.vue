@@ -7,7 +7,13 @@
       </button>
     </div>
     <div class="movie-list justify-content-center" v-show="showMovieList">
-      <MovieCard v-for="movie in likedMovies" :key="movie.id" :movie="movie" class="like-movie-card" @movie-selected="handleMovieSelected"/>
+      <template v-if="likedMovies.length === 0">
+        <p>담은 영화가 없습니다.</p>
+      </template>
+      <template v-else>
+        <MovieCard v-for="movie in likedMovies" :key="movie.id" :movie="movie" class="like-movie-card" @movie-selected="handleMovieSelected"/>
+      </template>
+      <!-- <MovieCard v-for="movie in likedMovies" :key="movie.id" :movie="movie" class="like-movie-card" @movie-selected="handleMovieSelected"/> -->
     </div>
   </div>
 </template>
@@ -66,7 +72,7 @@ export default {
 
 <style>
 .profile-item{
-  background-color: hwb(0 88% 10% / 0.932);
+  background-color: aliceblue;
   border-radius: 20px;
   padding: 20px;
 }
@@ -83,5 +89,6 @@ export default {
 
 .like-toggle-button{
   border-radius: 20px;
+  background-color: #2c3e50;
 }
 </style>

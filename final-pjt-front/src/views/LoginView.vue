@@ -109,7 +109,6 @@ export default {
                 if (currentPageName !== 'home') {
                   // Redirect to the home page
                   this.$router.push({ name: 'home' });
-                  // this.refresh();
                   window.location.reload();
                 }
             } 
