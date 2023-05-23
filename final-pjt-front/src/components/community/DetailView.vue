@@ -9,22 +9,22 @@
     </div>
 
     <hr>
-<!-- 
-    <button class="like-btn">
+
+    <button class="like-btn" :class="{ liked: isLiked }" @click="toggleLike(article.id)">
       <div class="hand">
         <div class="thumb"></div>
       </div>
-      <span>Like<span>{{ likeCount }}</span></span>
-    </button> -->
+      <span>Like <span>{{ likeCount }}</span></span>
+    </button>
     
 
-    <div class="like-actions">
+    <!-- <div class="like-actions">
       <a class="btn-thumb" @click="toggleLike(article.id)">
         <i class="bi fs-3" :class="isLiked ? 'bi-hand-thumbs-up-fill' : 'bi-hand-thumbs-up'"></i>
-        <!-- <i class="bi fs-3" :class="isLiked ? 'bi-heart-fill' : 'bi-heart'"></i> -->
+        <i class="bi fs-3" :class="isLiked ? 'bi-heart-fill' : 'bi-heart'"></i>
       </a>
       <p>{{ likeCount }}</p>
-    </div>
+    </div> -->
 
     <div class="content">
       <p>{{ article?.content }}</p>
@@ -296,4 +296,161 @@ export default {
     cursor: pointer;
     margin-left: 10px;
   }
+
+  .like-btn {
+  --color: #1E2235;
+  --color-hover: #1E2235;
+  --color-active: #fff;
+  --icon: #BBC1E1;
+  --icon-hover: #8A91B4;
+  --icon-active: #fff;
+  --background: #fff;
+  --background-hover: #fff;
+  --background-active: #362A89;
+  --border: #E1E6F9;
+  --border-active: #362A89;
+  --shadow: rgba(0, 17, 119, 0.025);
+  display: block;
+  outline: none;
+  cursor: pointer;
+  position: relative;
+  border: 0;
+  background: none;
+  padding: 8px 20px 8px 24px;
+  border-radius: 9px;
+  line-height: 27px;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--color);
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: color 0.2s linear;
+}
+.like-btn.dark {
+  --color: #F6F8FF;
+  --color-hover: #F6F8FF;
+  --color-active: #fff;
+  --icon: #8A91B4;
+  --icon-hover: #BBC1E1;
+  --icon-active: #fff;
+  --background: #1E2235;
+  --background-hover: #171827;
+  --background-active: #275EFE;
+  --border: transparent;
+  --border-active: transparent;
+  --shadow: rgba(0, 17, 119, 0.16);
+}
+.like-btn:hover {
+  --icon: var(--icon-hover);
+  --color: var(--color-hover);
+  --background: var(--background-hover);
+  --border-width: 2px;
+}
+.like-btn:active {
+  --scale: .95;
+}
+.like-btn:not(.liked):hover {
+  --hand-rotate: 8;
+  --hand-thumb-1: -12deg;
+  --hand-thumb-2: 36deg;
+}
+.like-btn.liked {
+  --span-x: 2px;
+  --span-d-o: 1;
+  --span-d-x: 0;
+  --icon: var(--icon-active);
+  --color: var(--color-active);
+  --border: var(--border-active);
+  --background: var(--background-active);
+}
+.like-btn:before {
+  content: "";
+  min-width: 103px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: inherit;
+  transition: background 0.2s linear, transform 0.2s, box-shadow 0.2s linear;
+  transform: scale(var(--scale, 1)) translateZ(0);
+  background: var(--background);
+  box-shadow: inset 0 0 0 var(--border-width, 1px) var(--border), 0 4px 8px var(--shadow), 0 8px 20px var(--shadow);
+}
+.like-btn .hand {
+  width: 11px;
+  height: 11px;
+  border-radius: 2px 0 0 0;
+  background: var(--icon);
+  position: relative;
+  margin: 10px 8px 0 0;
+  transform-origin: -5px -1px;
+  transition: transform 0.25s, background 0.2s linear;
+  transform: rotate(calc(var(--hand-rotate, 0) * 1deg)) translateZ(0);
+}
+.like-btn .hand:before, .like-btn .hand:after {
+  content: "";
+  background: var(--icon);
+  position: absolute;
+  transition: background 0.2s linear, box-shadow 0.2s linear;
+}
+.like-btn .hand:before {
+  left: -5px;
+  bottom: 0;
+  height: 12px;
+  width: 4px;
+  border-radius: 1px 1px 0 1px;
+}
+.like-btn .hand:after {
+  right: -3px;
+  top: 0;
+  width: 4px;
+  height: 4px;
+  border-radius: 0 2px 2px 0;
+  background: var(--icon);
+  box-shadow: -0.5px 4px 0 var(--icon), -1px 8px 0 var(--icon), -1.5px 12px 0 var(--icon);
+  transform: scaleY(0.6825);
+  transform-origin: 0 0;
+}
+.like-btn .hand .thumb {
+  background: var(--icon);
+  width: 10px;
+  height: 4px;
+  border-radius: 2px;
+  transform-origin: 2px 2px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  transition: transform 0.25s, background 0.2s linear;
+  transform: scale(0.85) translateY(-0.5px) rotate(var(--hand-thumb-1, -45deg)) translateZ(0);
+}
+.like-btn .hand .thumb:before {
+  content: "";
+  height: 4px;
+  width: 7px;
+  border-radius: 2px;
+  transform-origin: 2px 2px;
+  background: var(--icon);
+  position: absolute;
+  left: 7px;
+  top: 0;
+  transition: transform 0.25s, background 0.2s linear;
+  transform: rotate(var(--hand-thumb-2, -45deg)) translateZ(0);
+}
+.like-btn .hand,
+.like-btn span {
+  display: inline-block;
+  vertical-align: top;
+}
+.like-btn .hand span,
+.like-btn span span {
+  opacity: var(--span-d-o, 0);
+  transition: transform 0.25s, opacity 0.2s linear;
+  transform: translateX(var(--span-d-x, 4px)) translateZ(0);
+}
+.like-btn > span {
+  transition: transform 0.25s;
+  transform: translateX(var(--span-x, 4px)) translateZ(0);
+}
 </style>
