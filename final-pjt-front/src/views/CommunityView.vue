@@ -1,8 +1,9 @@
 <template>
   <div class="container">
+    <h1 style="margin-top:30px; color:aliceblue; font-size:35px; font-weight: bold;"><i class="bi bi-chat-right-text-fill me-2"></i>Where Cinema Lovers Connect</h1>
     <div class="button-group mt-5">
-      <button @click="showTopArticles" :class="{ 'active': displayTopArticles }" class="button">👑TopArticles</button>
-      <button @click="showMovieReviews" :class="{ 'active': displayMovieReviews }" class="button">MovieReviews</button>
+      <button @click="showTopArticles" :class="{ 'active': displayTopArticles }" class="button">{{ displayTopArticles ? '🔥HOT' : 'HOT' }}</button>
+      <button @click="showMovieReviews" :class="{ 'active': displayMovieReviews }" class="button">{{ displayMovieReviews ? '💬TALK' : 'TALK' }}</button>
     </div>
 
     <div v-if="displayTopArticles" class="content">
@@ -80,7 +81,7 @@ export default {
     width: 30%;
   }
   .button.active {
-    background-color:cornflowerblue;
+    background-color:rgb(127, 166, 239);
   }
   .content {
     margin-top: 30px;

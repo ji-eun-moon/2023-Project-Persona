@@ -1,13 +1,16 @@
 <template>
   <div>
-    <h1>글 수정</h1>
-    <form @submit.prevent="updateArticle">
-      <label for="title">제목: </label>
-      <input type="text" id="title" v-model.trim="title"><br>
-      <label for="content">내용: </label>
-      <textarea id="content" cols="30" rows="10" v-model="content"></textarea><br>
-      <input type="submit" value="수정">
-    </form>
+    <h1 style="color:aliceblue; font-weight:bold; font-size:30px; margin-top:30px;"><i class="bi bi-pencil-fill me-2"></i>Update Your Content</h1>
+    <div class="update-form">
+      <form @submit.prevent="updateArticle" class="form">
+        <label for="title" class="label"></label>
+        <input type="text" id="title" v-model.trim="title" class="input"><br>
+        <label for="content" class="label"></label>
+        <textarea id="content" cols="30" rows="10" v-model="content" class="textarea"></textarea><br>
+        <input type="submit" value="수정" class="submit-btn">
+      </form>
+    </div>
+    
   </div>
 </template>
 
@@ -55,6 +58,62 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.update-form {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  /* background-color: #f7f7f7; */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-top: 40px;
+}
+
+h1 {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid aliceblue;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+.textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid aliceblue;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.submit-btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color:rgb(127, 166, 239);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.submit-btn:hover {
+  background-color: rgb(127, 166, 239);
+}
 
 </style>

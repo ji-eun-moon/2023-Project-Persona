@@ -2,51 +2,43 @@
   <div class="container">
     <div class="detail-box">
       <!-- <p class="movie" style="text-align: left; margin-left: 10px;">No. {{ article?.id }}</p> -->
-      <p class="movie" style="text-align: left; margin-left: 10px;">제목: {{ article?.title }}</p>
-      <p class="movie" style="text-align: left; margin-left: 10px;">{{ article.username }} | {{ formatDateTime(article.created_at) }}</p>
-      <p class="movie" style="text-align: left; margin-left: 10px;">마지막 작성시간: {{ formatDateTime(article.updated_at) }}</p>
-    </div>
-    <!-- <div class="button-container"> -->
+      <p class="text-title" style="text-align: left; margin-left: 10px; font-size:30px; margin-bottom:20px;" >{{ article?.title }}</p>
+      <p class="text cursor-pointer" style="text-align: left; margin-left: 10px;" @click="gotoUserProfile(article.username)">{{ article.username }}</p>
+      <p class="text" style="text-align: left; margin-left: 10px;">{{ formatDateTime(article.created_at) }}</p>
+      <!-- <p class="review-username review-content movie me-3 cursor-pointer" @click="goToUserProfile(review.username)" ><p/> -->
+
+      <p class="text" style="text-align: left; margin-left: 10px;">마지막 작성시간: {{ formatDateTime(article.updated_at) }}</p>
       <button class="like-btn right-aligned" :class="{ liked: isLiked }" @click="toggleLike(article.id)">
         <div class="hand">
           <div class="thumb"></div>
         </div>
         <span>Like <span>{{ likeCount }}</span></span>
       </button>
-    <!-- </div> -->
+      <hr style="color:aliceblue;">
+      <div class="content">
+        <p>{{ article?.content }}</p>
+      </div>
 
-    <hr>
-
-    <!-- <div class="like-actions">
-      <a class="btn-thumb" @click="toggleLike(article.id)">
-        <i class="bi fs-3" :class="isLiked ? 'bi-hand-thumbs-up-fill' : 'bi-hand-thumbs-up'"></i>
-        <i class="bi fs-3" :class="isLiked ? 'bi-heart-fill' : 'bi-heart'"></i>
-      </a>
-      <p>{{ likeCount }}</p>
-    </div> -->
-
-    <div class="content">
-      <p>{{ article?.content }}</p>
-    </div>
-
-    <div class="actions">
-      <button @click="updateArticleBtn" class="update-btn me-1">수정</button>
-      <button @click="deleteArticle" class="delete-btn">삭제</button>
-    </div>
+      <div class="actions">
+        <button @click="updateArticleBtn" class="update-btn me-1">수정</button>
+        <button @click="deleteArticle" class="delete-btn">삭제</button>
+      </div>
     
-    <hr>
-    <div class="comment-box">
-      <form @submit.prevent="createComment">
+      <hr>
+      <div class="comment-box">
+        <form @submit.prevent="createComment">
 
-        <label for="content"></label>
-        <textarea id="content" cols="30" rows="5" v-model="commentContent" placeholder="댓글을 입력하세요"></textarea><br>
+          <label for="content"></label>
+          <textarea id="content" cols="30" rows="5" v-model="commentContent" placeholder="댓글을 입력하세요"></textarea><br>
 
-        <button type="submit">댓글 작성</button>
-      </form>
+          <button type="submit">댓글 작성</button>
+        </form>
+      </div>
+
     </div>
-    <br>
-    <hr>
 
+    <hr>
+    
     <div class="comment-list">
       <div v-for="(comment,index) in commentList" :key="`${comment.id}-${index}`" class="comment-item">
         <p class="comment-username">{{ comment.username }}</p>
@@ -198,22 +190,38 @@ export default {
 
     formatDateTime(dateTime) {
       return moment(dateTime).format('YYYY-MM-DD HH:mm:ss')
-    }
+    },
+    gotoUserProfile(username) {
+      this.$router.push(`/profile/${username}`);
+    },
   }
 }
 </script>
 
 <style>
-  
   .detail-box {
     margin-top: 20px;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+  .text-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: aliceblue;
+  }
+  .text {
+    font-size: 16px;
+    color:aliceblue;
+    margin-bottom: 5px;
   }
   .comment-box {
     border: 1px solid white;
     padding: 10px;
-    margin-top: 20px;
+    margin-top: 10px;
     border-radius: 10px;
-    /* background-color: #f5f5f5af; */
   }
   .comment-box label {
     font-weight: bold;
@@ -234,7 +242,7 @@ export default {
     border-radius: 15px;
   }
   .comment-box button:hover {
-    background-color: #45a049;
+    background-color: rgb(127, 166, 239);
   }
   .comment-list {
     margin-top: 20px;
@@ -328,10 +336,6 @@ export default {
     cursor: pointer;
     margin-left: 10px;
   }
-  /* .button-container {
-    margin-left: auto;
-    margin-right: 10px;
-  } */
   .right-aligned {
     margin-left: auto;
   }
