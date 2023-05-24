@@ -30,7 +30,7 @@
           </div>
 
         </div>
-        <div v-else class="no-character">
+        <div v-else class="no-character1">
           <h5>아직 부캐가 설정되지 않은 사용자 입니다.</h5>
         </div>
   
@@ -72,7 +72,7 @@
         </a>
       </div>
     </div>
-    <h5 v-else class="no-character">아직 부캐가 설정되지 않은 사용자 입니다.</h5>
+    <h5 v-else class="no-character2">아직 부캐가 설정되지 않은 사용자 입니다.</h5>
   </div>
 
 </div>
@@ -257,9 +257,15 @@ export default {
   border-radius: 20px;
 }
 
-.no-character{
-  margin-left: 100px;
-  margin-bottom: 20px
+.no-character1{
+  /* margin-left: 10px; */
+  margin-bottom: 20px;
+  /* text-align: left; */
+}
+.no-character2{
+  margin-left: 20px;
+  margin-bottom: 20px;
+  /* text-align: left; */
 }
 
 .random-btn-container {

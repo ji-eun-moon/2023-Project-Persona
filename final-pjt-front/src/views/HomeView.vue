@@ -4,9 +4,11 @@
       <TrendingList class="my-5" @movie-selected="handleMovieSelected"/>
       <NowPlayingList class="my-5" @movie-selected="handleMovieSelected"/>
       <UpcomingList class="my-5" @movie-selected="handleMovieSelected"/>
+
       <!-- <GenreList @movie-selected="handleMovieSelected" v-if="!showGenres"/>
       <LikeGenreList @movie-selected="handleMovieSelected" v-if="showGenres"/> -->
       <component :is="listComponent" @movie-selected="handleMovieSelected" />
+
     </div>
 
    <div class="modal-container" v-if="showModal==true" >
