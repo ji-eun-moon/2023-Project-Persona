@@ -2,9 +2,9 @@
   <div>
     <h1>게시글 작성</h1>
     <form @submit.prevent="createArticle" class="article-form">
-      <label for="title" class="form-label">제목: </label>
+      <label for="title" class="form-label">제목</label>
       <input type="text" id="title" v-model.trim="title" class="form-input"  placeholder="제목을 입력하세요"><br>
-      <label for="content" class="form-label">내용: </label>
+      <label for="content" class="form-label">내용</label>
       <textarea id="content" cols="30" rows="10" v-model="content" class="form-textarea"  placeholder="내용을 입력하세요"></textarea><br>
       <input type="submit" id="submit" class="form-submit">
     </form>
@@ -13,6 +13,7 @@
 
 <script>
 import axios from 'axios'
+import { eventBus } from '@/event-bus'
 const API_URL = 'http://127.0.0.1:8000'
 
 export default {
@@ -41,6 +42,7 @@ export default {
         }
         await axios.post(`${API_URL}/api/v1/articles/`, data, config)
         await this.$router.push({name:'community'})
+        eventBus.$emit('articleCreated')
       } catch (error) {
         console.log('Failed to create article list: ', error)
       }
