@@ -1,38 +1,59 @@
 <template>
 <div>
   <div class="profile-item mb-2">
-    <h2 class="profile-item-header fs-1">INFO</h2>
-
-    <div class="d-flex user-info align-items-center">
-      <div class="d-flex">
-        <div class="ms-3 mb-5 me-5">
-          <img :src="getActorImageURL(userInfo?.profile_img)" alt="userInfo.username" class="profile-image mb-3">
-          <p>{{ actorDetail?.name }}</p>
-          <p>{{ actorDetail?.birthday}}</p>
-          <p>{{ actorDetail?.place_of_birth}}</p>
-          <!-- <h5 class="user-info-item">{{ userInfo?.username }}</h5> -->
+    <div class="d-flex user-info align-items-between justify-content-center">
+      <div class="d-flex justify-content-center">
+        <div class="mb-5 me-5">
+          <div>
+            <img :src="getActorImageURL(userInfo?.profile_img)" alt="userInfo.username" class="profile-image mb-5">
+          </div>
+          <div class="mb-5">
+            <p>{{ actorDetail?.name }}</p>
+            <p>{{ actorDetail?.birthday}}</p>
+            <p>{{ actorDetail?.place_of_birth}}</p>
+            <!-- <h5 class="user-info-item">{{ userInfo?.username }}</h5> -->
+          </div>
+          <div>
+            <button v-if="isMyProfile" @click="handleClickActor" class="btn btn-secondary random-btn">부캐 랜덤 추천 받기</button>
+          </div>
         </div>
       </div>
-    
-      <div v-if="userInfo && userInfo.character" class="character-info">
-          <h3 class="profile-item-header">{{ userInfo?.username }}의 부캐 {{ actorDetail?.name }}</h3>
-          <h4>주요 작품</h4>
-        <ul>
-          <li v-for="movie in limitedMovies" :key="movie.id">
-            {{ movie.title }}
-          </li>
-        </ul>
-        <p>여기에 뭘 적으면 좋을까?</p>
-        <p>좋아요한 글?</p>
-      </div>
-      <div v-else class="no-character">
-        <h5>아직 부캐가 설정되지 않은 사용자 입니다.</h5>
-      </div>
 
-      <div class="random-btn-container">
-        <button v-if="isMyProfile" @click="handleClick" class="btn btn-secondary random-btn">부캐 랜덤 추천 받기</button>
+      <div class="d-flex row">
+        <div v-if="userInfo && userInfo.character" class="character-info">
+          <h2 class="profile-item-header">{{ isMyProfile ? "나의" : $route.params.username + "'s" }} 부캐 주요 작품</h2>
+          
+          <div class="character-movie">
+            <div v-for="movie in limitedMovies" :key="movie.id" class="mb-3">
+              <h5> {{ movie.title }} </h5>
+            </div>
+          </div>
+
+        </div>
+        <div v-else class="no-character">
+          <h5>아직 부캐가 설정되지 않은 사용자 입니다.</h5>
+        </div>
+  
+        <div class="like-genres">
+          <h2 class="profile-item-header mb-4">{{$route.params.username}}님이 좋아하는 장르</h2>
+            <div v-if="userGenres.length > 0">
+              <ul class="genre-list">
+                <li v-for="genre in userGenres" :key="genre.id" class="genre-list-item mb-2">
+                  <i class="bi bi-camera-reels-fill"></i> {{ genre.name }}
+                </li>
+              </ul>
+            </div>
+            <div v-else>
+              선택한 장르가 아직 없습니다.
+            </div>
+        </div>
       </div>
-  </div>
+    </div>
+
+    <div class="pagination">
+      <span class="spacer"></span>
+      <button v-if="isMyProfile" @click="handleClickGenre" class="btn btn-secondary random-btn">좋아하는 장르 고르기</button>
+    </div>
   </div>
 
   <div class="profile-item">
@@ -77,6 +98,8 @@ export default {
       userInfo: null,
       actorDetail: null,
       movies: [],
+      
+      userGenres:[],
 
       movieChunks: [],
       displayedMovies: [],
@@ -104,6 +127,7 @@ export default {
   created() {
     // this.getUserInfo();
     this.getUserProfile(this.$route.params.username);
+    this.fetchUserGenres()
   },
   methods: {
     getActorImageURL(imagePath) {
@@ -186,12 +210,35 @@ export default {
         this.displayedMovies = this.movieChunks[this.currentPage - 1];
       }
     },
-    handleClick(){
+    handleClickActor(){
       this.$emit('select-actor');
+    },
+    handleClickGenre(){
+      this.$emit('select-genre');
     },
     handleMovieSelected(movieId) {
       this.$emit('movie-selected', movieId);
     },
+
+    // 선택한 장르 가져오기
+    fetchUserGenres() {
+      const username = this.$route.params.username; // 유저 이름 가져오기
+      const token = this.$store.state.token.token; // 토큰 가져오기
+      const config = {
+        headers: {
+          Authorization: `Token ${token}`, // 헤더에 토큰 추가
+        },
+      };
+      axios
+        .get(`http://127.0.0.1:8000/api/v1/genres/${username}/`, config)
+        .then(response => {
+          console.log(response.data)
+          this.userGenres = response.data.genres;
+        })
+        .catch(error => {
+          console.error('Failed to fetch user genres:', error);
+        });
+    }
   }
 }
 </script>
@@ -213,10 +260,6 @@ export default {
 .no-character{
   margin-left: 100px;
   margin-bottom: 20px
-}
-
-.user-info-item{
-  font-weight: 600;
 }
 
 .random-btn-container {
@@ -241,5 +284,44 @@ export default {
 
 .spacer {
   flex-grow: 1;
+}
+
+.genre-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.genre-list-item {
+  display: inline-block;
+  margin-right: 10px;
+  background-color: #2c3e50;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-weight: 400px;
+}
+
+.like-genres {
+  margin-top: 20px;
+}
+
+.user-info {
+  font-size: 15px;
+  font-weight: 400;
+  margin : 50px;
+}
+
+.character-movie {
+  margin-top : 40px;
+  background-color: #2c3e50;
+  color:aliceblue;
+  padding: 10px;
+  border-radius: 20px;
+}
+
+.character-info {
+  display: flex;
+  flex-direction: column;
 }
 </style>

@@ -34,7 +34,8 @@
       <p class="movie" v-else>로그인 하고 부캐를 골라보세요!</p>
       <div class="cast-images d-flex justify-content-center">
         <div v-for="(cast, index) in movieCast" :key="index" class="cast-profile">
-          <img :src="getProfileImageUrl(cast.profile_path)" :alt="cast.name" class="cast-image cursor-pointer" @click="saveProfileImage(cast)" />
+          <img :src="getProfileImageUrl(cast.profile_path)" :alt="cast.name" class="cast-image cursor-pointer" 
+          data-bs-toggle="tooltip" data-bs-placement="top" title="부캐로 설정하시려면 클릭하세요!" @click="saveProfileImage(cast)" />
           <span class="cast-name movie-title">{{ cast.name }}</span>
         </div>
       </div>
@@ -64,7 +65,8 @@
             <p class="review-content movie fs-5">{{ review.content }}</p>
             <div class="review-meta d-flex me-3 mt-3">
               <div class="d-flex me-3">
-                <p class="review-username review-content movie me-3 cursor-pointer" @click="goToUserProfile(review.username)">{{ review.username }}</p>
+                <p class="review-username review-content movie me-3 cursor-pointer" @click="goToUserProfile(review.username)" 
+                data-bs-toggle="tooltip" data-bs-placement="top" title="프로필을 보시려면 클릭하세요!">{{ review.username }}</p>
                 <p class="movie">{{ formatDateTime(review.created_at) }}</p>
               </div>
               <div class="d-flex justify-content-end" v-if="review.username === username">

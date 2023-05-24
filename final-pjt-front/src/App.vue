@@ -4,7 +4,8 @@
       <div class="container">
 
         <!-- <router-link class="navbar-brand" :to="{ name: 'home' }">logo</router-link> -->
-          <i class="navbar-brand bi bi-camera-reels-fill"></i>
+        <img :src="require('@/assets/eye-mask.png')" class="logo-img" alt="">
+        <img :src="require('@/assets/persona.png')" class="logo me-2" alt="">
           <ul class="navbar-nav movie-title">
             <li class="nav-item">
               <router-link class="nav-link" :to="{ name: 'home' }">Home</router-link>
@@ -24,17 +25,29 @@
               <button class="btn btn-dark dropdown-toggle movie-title" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                 MyPage
               </button>
-              <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
-                <img :src="getProfileImageURL(userInfo)" alt="userInfo.username" class="my-profile-image mb-3">
+              <div class="dropdown-menu dropdown-menu-end justify-content-center" aria-labelledby="dropdownMenuButton1">
+                <div class="">
+                  <img :src="getProfileImageURL(userInfo)" alt="userInfo.username" class="my-profile-image mb-3">
+                </div>
                   <div class="d-flex align-items-center mypage-items">
                     <!-- <router-link class="nav-link c-yellow" :to="{ name: 'LoginView' }" v-if="!$store.state.token.loggedIn">login</router-link> -->
                     <div>
                       <button @click="loginShow=true" class="btn btn-outline-dark" v-if="!$store.state.token.loggedIn">LOGIN</button>
                     </div>
                     <div v-if="$store.state.token.loggedIn">
-                      <h3 class="mb-3">Hello, {{this.$store.state.token.username}}</h3>
+                      <h3 class="mb-3 hello">Hello, {{this.$store.state.token.username}}</h3>
                     </div>
-                    <div>
+
+                      <h5 class="mt-2">선호 장르</h5>
+                      <div v-if="userGenres.length > 0 && $store.state.token.loggedIn" class="d-flex ms-5">
+                        <ul class="genre-list">
+                          <li v-for="genre in userGenres" :key="genre.id" class="genre-list-item mb-2">
+                            <i class="bi bi-camera-reels-fill"></i> {{ genre.name }}
+                          </li>
+                        </ul>
+                      </div>
+
+                    <div class="mt-2">
                       <router-link class="profile-link" :to="{ name: 'profile', params: { username: $store.state.token.username }}" v-if="$store.state.token.loggedIn">나의 프로필 보기</router-link>
                     </div>
                     <button @click="logout" v-if="$store.state.token.loggedIn" class="btn btn-outline-danger mt-3">LOGOUT</button>
@@ -59,14 +72,15 @@
       </div>
     </div>
 
-    <router-view/>
+    <router-view/> 
   </div>
 </template>
 
-<script>
+<script> 
 import { mapActions } from 'vuex';
 import { eventBus } from './event-bus';
 import LoginView from '@/views/LoginView.vue'
+import axios from 'axios'
 
 export default {
   name : 'App',
@@ -83,6 +97,7 @@ export default {
       this.$store.commit("setLoggedIn", true);
       this.$store.dispatch('saveUsername', username)
       this.$store.dispatch('fetchUserProfile', username)
+      this.fetchUserGenres();
       console.log('로그인 유지 확인:',this.$store.state.token.username, this.$store.state.token.loggedIn, this.$store.state.token.token)
     }
   },
@@ -94,6 +109,7 @@ export default {
   data() {
     return {
       loginShow: false,
+      userGenres:[],
     }
   },
   methods : {
@@ -121,6 +137,24 @@ export default {
       alert('로그인이 필요한 서비스입니다.')
       this.loginShow = true;
     },
+    fetchUserGenres() {
+      const username = this.$store.state.token.username; // 유저 이름 가져오기
+      const token = this.$store.state.token.token; // 토큰 가져오기
+      const config = {
+        headers: {
+          Authorization: `Token ${token}`, // 헤더에 토큰 추가
+        },
+      };
+      axios
+        .get(`http://127.0.0.1:8000/api/v1/genres/${username}/`, config)
+        .then(response => {
+          console.log(response.data)
+          this.userGenres = response.data.genres;
+        })
+        .catch(error => {
+          console.error('Failed to fetch user genres:', error);
+        });
+    }
   },
 
 }
@@ -155,6 +189,7 @@ nav a.router-link-exact-active {
 .dropdown-menu {
   padding: 30px;
   border-radius: 20px;
+  width: 400px;
 }
 
 .my-profile-image {
@@ -162,9 +197,22 @@ nav a.router-link-exact-active {
   object-fit: cover;
   border-radius: 40%;
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.3);
+  background-color: aliceblue;
+  margin-left: 90px;
 }
 
 .mypage-items {
   flex-direction: column;
+}
+
+.logo-img{
+ width: 50px;
+}
+.logo {
+  width: 100px;
+}
+
+.hello {
+  font-weight: 600;
 }
 </style>

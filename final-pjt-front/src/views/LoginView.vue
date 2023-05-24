@@ -110,6 +110,8 @@ export default {
                   // Redirect to the home page
                   this.$router.push({ name: 'home' });
                   window.location.reload();
+                } else {
+                  window.location.reload();
                 }
             } 
         } catch(error) {
