@@ -105,7 +105,7 @@ export default {
 }
 .create-btn {
   padding: 5px 10px;
-  background-color: #2196f3;
+  background-color: rgb(127, 166, 239);
   color: aliceblue;
   border: none;
   border-radius: 4px;
@@ -140,10 +140,10 @@ td {
 .pagination li a {
   padding: 5px 10px;
   text-decoration: none;
-  color: #2196f3;
+  color: rgb(127, 166, 239);
 }
 .pagination li.active a {
-  background-color: #2196f3;
+  background-color: rgb(127, 166, 239);
   color: aliceblue;
 }
 .pagination li.disabled a {

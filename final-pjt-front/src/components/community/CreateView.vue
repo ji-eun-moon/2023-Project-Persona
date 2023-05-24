@@ -1,13 +1,16 @@
 <template>
   <div>
-    <h1>게시글 작성</h1>
-    <form @submit.prevent="createArticle" class="article-form">
-      <label for="title" class="form-label">제목</label>
-      <input type="text" id="title" v-model.trim="title" class="form-input"  placeholder="제목을 입력하세요"><br>
-      <label for="content" class="form-label">내용</label>
-      <textarea id="content" cols="30" rows="10" v-model="content" class="form-textarea"  placeholder="내용을 입력하세요"></textarea><br>
-      <input type="submit" id="submit" class="form-submit">
-    </form>
+    <h1 style="margin-top:30px; color:aliceblue; margin-bottom:30px;"><i class="bi bi-pencil-fill me-2"></i>Write Your Story</h1>
+    <div class="create-form">
+      <form @submit.prevent="createArticle" class="article-form">
+        <label for="title" class="title-label"></label>
+        <input type="text" id="title" v-model.trim="title" class="title-input"  placeholder="제목을 입력하세요"><br>
+        <label for="content" class="textarea-label"></label>
+        <textarea id="content" cols="30" rows="10" v-model="content" class="textarea-input"  placeholder="내용을 입력하세요"></textarea><br>
+        <input type="submit" id="submit" class="form-submit">
+      </form>
+    </div>
+    
   </div>
 </template>
 
@@ -80,30 +83,50 @@ export default {
     max-width: 400px;
     margin: 0 auto;
   }
-  .form-label {
+  /* .title-label {
     font-size: 18px;
-    margin-bottom: 10px;
+    margin-top: 30px;
     color: aliceblue;
+  } */
+  /* .textarea-label {
+    font-size: 18px;
+    margin-top: 10px;
+    color: aliceblue;
+  } */
+  .create-form {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    /* background-color: #f7f7f7; */
+    border: 1px solid #ccc;
+    border-radius: 5px;
   }
-  .form-input,
-  .form-textarea {
+  .title-input {
     width: 100%;
     padding: 8px;
     font-size: 16px;
     border: 1px solid aliceblue;
     border-radius: 10px;
-    margin-bottom: 10px;
+    margin-top: 30px;
+  }
+  .textarea-input {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid aliceblue;
+    border-radius: 10px;
+    margin-top: 10px;
   }
   .form-submit {
     padding: 8px 16px;
     font-size: 18px;
-    background-color: #4CAF50;
+    background-color: darkgray;
     color: aliceblue;
     border: none;
     border-radius: 10px;
     cursor: pointer;
   }
   .form-submit:hover {
-    background-color: #45a049;;
+    background-color: rgb(127, 166, 239);
   }
 </style>
