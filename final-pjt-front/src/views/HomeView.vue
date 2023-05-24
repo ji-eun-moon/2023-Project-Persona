@@ -4,8 +4,11 @@
       <TrendingList class="my-5" @movie-selected="handleMovieSelected"/>
       <NowPlayingList class="my-5" @movie-selected="handleMovieSelected"/>
       <UpcomingList class="my-5" @movie-selected="handleMovieSelected"/>
-      <GenreList @movie-selected="handleMovieSelected"/>
-      <!-- <LikeGenreList /> -->
+
+      <!-- <GenreList @movie-selected="handleMovieSelected" v-if="!showGenres"/>
+      <LikeGenreList @movie-selected="handleMovieSelected" v-if="showGenres"/> -->
+      <component :is="listComponent" @movie-selected="handleMovieSelected" />
+
     </div>
 
    <div class="modal-container" v-if="showModal==true" >
@@ -26,8 +29,9 @@ import TrendingList from "@/components/movies/TrendingList.vue"
 import UpcomingList from "@/components/movies/UpcomingList.vue"
 import GenreList from "@/components/movies/GenreList.vue"
 import MovieDetail from '@/components/movies/MovieDetail.vue'
-// import LikeGenreList from '@/components/movies/LikeGenreList.vue'
+import LikeGenreList from '@/components/movies/LikeGenreList.vue'
 import { mapState } from 'vuex'
+import axios from 'axios'
 
 export default {
   
@@ -38,12 +42,14 @@ export default {
     UpcomingList,
     GenreList,
     MovieDetail,
-    // LikeGenreList
+    LikeGenreList
   },
   data() {
     return {
       showModal: false,
-      selectedMovieId: null
+      selectedMovieId: null,
+      genresExist: false,
+      genresLoaded: false,
     }
   },
   computed: {
@@ -61,6 +67,18 @@ export default {
         return {};
       }
     },
+    listComponent() {
+      return this.genresExist ? 'LikeGenreList' : 'GenreList';
+    },
+
+    
+  },
+  created() {
+    if (this.$store.state.token.loggedIn) {
+      this.fetchUserGenres();
+    } else {
+      this.genresLoaded = true;
+    }
   },
   methods: {
     handleMovieSelected(movieId) {
@@ -74,7 +92,27 @@ export default {
       } else {
         return "";
       }
-    }
+    },
+    fetchUserGenres() {
+      const username = this.$store.state.token.username;
+      const token = this.$store.state.token.token;
+      const config = {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      };
+      axios
+        .get(`http://127.0.0.1:8000/api/v1/genres/${username}/`, config)
+        .then(response => {
+          this.genresExist = response.data.genres.length > 0;
+        })
+        .catch(error => {
+          console.error('Failed to fetch user genres:', error);
+        })
+        .finally(() => {
+          this.genresLoaded = true;
+        });
+    },
   },
 }
 </script>

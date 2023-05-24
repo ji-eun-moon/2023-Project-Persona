@@ -46,6 +46,9 @@
                           </li>
                         </ul>
                       </div>
+                      <div v-else>
+                        <p>선택한 장르가 없습니다.</p>
+                      </div>
 
                     <div class="mt-2">
                       <router-link class="profile-link" :to="{ name: 'profile', params: { username: $store.state.token.username }}" v-if="$store.state.token.loggedIn">나의 프로필 보기</router-link>

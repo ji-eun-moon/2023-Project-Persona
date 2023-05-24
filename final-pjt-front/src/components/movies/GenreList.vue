@@ -96,6 +96,8 @@ computed: {
     const groups = [];
     for (let i = 0; i < this.selectedGenres.length; i++) {
       const genre = this.selectedGenres[i];
+      // console.log('GenreMovies:',this.genreMovies)
+      // console.log('Genre:',genre)
       const movies = this.genreMovies[genre.id];
       if (movies) {
         const genreGroup = [];
