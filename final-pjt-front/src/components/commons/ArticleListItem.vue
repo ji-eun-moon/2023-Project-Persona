@@ -48,4 +48,10 @@ export default {
     text-decoration-line: none;
     color: aliceblue;
   }
+  td {
+    padding: 10px;
+    /* border: 1px solid aliceblue; */
+    text-align: center;
+    font-weight: 300;
+  }
 </style>

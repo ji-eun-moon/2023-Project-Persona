@@ -1,90 +1,153 @@
 <template>
-<div class="table-container">
-  <div class="create">
-    <router-link :to="{ name:'CreateView' }">
-    <button class="create-btn">글쓰기</button>
-    </router-link>
+  <div class="table-container">
+    <div>
+      <table class="table table-dark table-hover table-sm">
+        <thead>
+          <tr>
+            <th>No.</th>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>작성일</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ArticleListItem
+            v-for="(article, index) in displayedArticles"
+            :key="article.id"
+            :article="article"
+            :index="index"
+          />
+        </tbody>
+      </table>
+    </div>
+
+    <div class="create">
+      <router-link :to="{ name:'CreateView' }">
+        <button class="create-btn">글쓰기</button>
+      </router-link>
+    </div>
+
+    <nav aria-label="Page navigation example" class="pagination-wrapper">
+      <ul class="pagination">
+        <li class="page-item" :class="{ disabled: currentPage === 1 }">
+          <a class="page-link" href="#" aria-label="Previous" @click="prevPage">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+        <li class="page-item" v-for="pageNumber in totalPages" :key="pageNumber" :class="{ active: currentPage === pageNumber }">
+          <a class="page-link" href="#" @click="setCurrentPage(pageNumber)">{{ pageNumber }}</a>
+        </li>
+        <li class="page-item" :class="{ disabled: currentPage === totalPages }">
+          <a class="page-link" href="#" aria-label="Next" @click="nextPage">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
   </div>
-  
-  
-  <div>
-    <table class="table table-dark table-striped table-hover table-sm">
-      <thead>
-        <tr>
-          <th>No.</th>
-          <th>제목</th>
-          <th>작성자</th>
-          <th>작성일</th>
-        </tr>
-      </thead>
-      <tbody>
-        <ArticleListItem 
-          v-for="(article,index) in articles"
-          :key="article.id"
-          :article="article"
-          :index="index" />
-      </tbody>
-    </table>
-  </div>
-</div>
 </template>
 
 <script>
 import ArticleListItem from '@/components/commons/ArticleListItem'
 import { mapState } from 'vuex'
 
-
 export default {
-    name: "MovieReviews",
-    components: {
-      ArticleListItem
+  name: "MovieReviews",
+  components: {
+    ArticleListItem
+  },
+  data() {
+    return {
+      currentPage: 1,
+      itemsPerPage: 10
+    };
+  },
+  computed: {
+    ...mapState({
+      articles: (state) => state.community.articles
+    }),
+    displayedArticles() {
+      const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+      const endIndex = startIndex + this.itemsPerPage;
+      return this.articles.slice(startIndex, endIndex);
     },
-    computed: {
-      ...mapState ({
-        articles: state => state.community.articles,
-      })
-    },    
-}
+    totalPages() {
+      return Math.ceil(this.articles.length / this.itemsPerPage);
+    }
+  },
+  methods: {
+    setCurrentPage(pageNumber) {
+      this.currentPage = pageNumber;
+    },
+    prevPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
+    },
+    nextPage() {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++;
+      }
+    }
+  }
+};
 </script>
 
 <style scoped>
-  table {
-    width:100%;
-    border-collapse: collapse;
-    text-align: center;
-  }
-  .table-container {
-    display: flex;
-    flex-direction: column;
-  }
-  .create {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 10px;
-  }
-  .create-btn {
-    padding: 5px 10px;
-    background-color: #2196f3;
-    color: aliceblue;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  th {
-    padding: 10px;
-    border: 1px solid aliceblue;
-    background-color: aliceblue;
-    text-align: center;
-    color: black;
-  }
-  td {
-    padding: 10px;
-    border: 1px solid aliceblue;
-    text-align: center;
-  }
-  .tr:hover {
-    background-color: aliceblue;
-  }
 
+.table-container {
+  margin-bottom: 20px;
+}
+.create {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+.create-btn {
+  padding: 5px 10px;
+  background-color: #2196f3;
+  color: aliceblue;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.table th {
+  padding: 10px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 500;
+}
+td {
+  padding: 10px;
+  border: 1px solid aliceblue;
+  text-align: center;
+  font-size: 15px;
+}
+.tr:hover {
+  background-color: aliceblue;
+}
+.pagination-wrapper {
+  display: flex;
+  justify-content: center;
+}
+.pagination {
+  margin-top: 10px;
+}
+.pagination li {
+  display: inline-block;
+}
+.pagination li a {
+  padding: 5px 10px;
+  text-decoration: none;
+  color: #2196f3;
+}
+.pagination li.active a {
+  background-color: #2196f3;
+  color: aliceblue;
+}
+.pagination li.disabled a {
+  pointer-events: none;
+  opacity: 0.6;
+}
 </style>

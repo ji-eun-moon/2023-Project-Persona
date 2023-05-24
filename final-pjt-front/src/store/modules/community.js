@@ -1,34 +1,34 @@
-import axios from 'axios'
-const API_URL = 'http://127.0.0.1:8000'
+import axios from 'axios';
 
-const community = {
+const API_URL = 'http://127.0.0.1:8000';
+
+export default {
   state: {
-    articles: []
-  },
-  getters: {
-
+    articles: [],
   },
   mutations: {
-    GET_ARTICLES(state, articles) {
-      state.articles = articles
-    }
+    SET_ARTICLES(state, articles) {
+      state.articles = articles;
+    },
   },
   actions: {
-    getArticles(context) {
+    getArticles({ commit, rootState }) {
       axios({
         method: 'get',
         url: `${API_URL}/api/v1/articles/`,
         headers: {
-          Authorization: `Token ${context.rootState.token.token}`
-        }
+          Authorization: `Token ${rootState.token.token}`,
+        },
       })
-      .then(res =>
-        // console.log(res,context)
-        context.commit('GET_ARTICLES',res.data)
-      )
-      .catch(err => console.log(err))
-    }
-  }
-}
-
-export default community
+        .then(res => {
+          commit('SET_ARTICLES', res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+  },
+  getters: {
+    
+  },
+};

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <table class="table table-dark table-striped table-hover table-sm">
+    <table class="table table-dark table-hover table-sm">
       <thead>
         <tr>
           <th>작성자</th>
@@ -16,6 +16,10 @@
         </tr>
       </tbody>
     </table>
+
+    
+
+
   </div>
 </template>
 
@@ -38,6 +42,7 @@ export default {
         try {
           const response = await axios.get(`${API_URL}/api/v1/articles/top/`)
           this.topArticles = response.data
+          console.log(response)
         } catch (error) {
           console.log('Failed to fetch popular articles:', error)
         }
@@ -69,14 +74,33 @@ export default {
     text-decoration-line: none;
     color: aliceblue;
   }
-  /* table {
+  .table {
     width: 100%;
     border-collapse: collapse;
-    border-spacing: 0;
-  } */
-  /* th,td {
-    padding: 8px;
-    text-align: left;
-    border-bottom: 1px solid aliceblue;
-  } */
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .table-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .table th {
+    padding: 10px;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 500;
+  }
+  .table td {
+    padding: 10px;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 300;
+  }
+  .table thead {
+    background-color: #f5f5f5;
+  }
+  .tr:hover {
+    background-color: aliceblue;
+  }
 </style>
