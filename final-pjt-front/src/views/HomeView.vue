@@ -5,6 +5,7 @@
       <NowPlayingList class="my-5" @movie-selected="handleMovieSelected"/>
       <UpcomingList class="my-5" @movie-selected="handleMovieSelected"/>
       <GenreList @movie-selected="handleMovieSelected"/>
+      <LikeGenreList />
     </div>
 
    <div class="modal-container" v-if="showModal==true" >
@@ -25,6 +26,7 @@ import TrendingList from "@/components/movies/TrendingList.vue"
 import UpcomingList from "@/components/movies/UpcomingList.vue"
 import GenreList from "@/components/movies/GenreList.vue"
 import MovieDetail from '@/components/movies/MovieDetail.vue'
+import LikeGenreList from '@/components/movies/LikeGenreList.vue'
 import { mapState } from 'vuex'
 
 export default {
@@ -35,7 +37,8 @@ export default {
     TrendingList,
     UpcomingList,
     GenreList,
-    MovieDetail
+    MovieDetail,
+    LikeGenreList
   },
   data() {
     return {
