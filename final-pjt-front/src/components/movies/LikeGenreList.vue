@@ -1,26 +1,26 @@
 <template>
   <div>
     <div class="trending-list-header">
-      <h1 class="me-1 list-header">{{username}}님 만을 위한 추천 영화</h1>
+      <h1 class="me-1 list-header">{{username}}님을 위한 추천 영화</h1>
     </div>
       <div v-for="(genre, index) in selectedGenres" :key="index">
       <h2 class="me-2 list-header my-3">{{ genre.name }} 영화</h2>
-      <div :id="'genreCarousel-' + index" class="carousel slide" data-bs-ride="carousel">
+      <div :id="'likeGenreCarousel-' + index" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
           <div v-for="(group, groupIndex) in GenreMoviesGroup[index]" :key="groupIndex" :class="['carousel-item', { active: groupIndex === 0 }]">
             <ul class="card-list">
               <li v-for="movie in group" :key="movie.id" class="card-item">
-                <MovieCard :movie="movie"/>
+                <MovieCard :movie="movie" @movie-selected="handleMovieSelected"/>
               </li>
             </ul>
           </div>
         </div>
         <div class="carousel-control-wrapper">
-          <button class="carousel-control-prev" type="button" :data-bs-target="'#genreCarousel-' + index" data-bs-slide="prev">
+          <button class="carousel-control-prev" type="button" :data-bs-target="'#likeGenreCarousel-' + index" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Previous</span>
           </button>
-          <button class="carousel-control-next" type="button" :data-bs-target="'#genreCarousel-' + index" data-bs-slide="next">
+          <button class="carousel-control-next" type="button" :data-bs-target="'#likeGenreCarousel-' + index" data-bs-slide="next">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Next</span>
           </button>
@@ -66,21 +66,21 @@ export default {
       this.getMoviesByGenres();
     },
     getMoviesByGenres() {
-      const API_KEY = 'ec7cb21d2c86952874cdb3ff92cd1dfd';
+  const API_KEY = 'ec7cb21d2c86952874cdb3ff92cd1dfd';
 
-      this.selectedGenres.forEach(genre => {
-        const url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=ko&with_genres=${genre.id}&sort_by=popularity.desc`;
-        axios.get(url)
-          .then(response => {
-            this.$set(this.genreMovies, genre.genre_id, response.data.results);
-            console.log(this.genreMovies)
-          })
-          .catch(error => {
-            console.error(`Error fetching movies for genre ${genre.name}:`, error);
-            this.$set(this.genreMovies, genre.genre_id, []);
-          });
+  this.selectedGenres.forEach(genre => {
+    const url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=ko&with_genres=${genre.genre_id}&sort_by=popularity.desc`;
+    axios.get(url)
+      .then(response => {
+        // console.log(response.data)
+        this.$set(this.genreMovies, genre.genre_id, response.data.results);
+      })
+      .catch(error => {
+        console.error(`Error fetching movies for genre ${genre.name}:`, error);
+        this.$set(this.genreMovies, genre.genre_id, []);
       });
-    },
+  });
+},
     fetchUserGenres() {
       const username = this.$store.state.token.username; // 유저 이름 가져오기
       const token = this.$store.state.token.token; // 토큰 가져오기
@@ -99,25 +99,30 @@ export default {
         .catch(error => {
           console.error('Failed to fetch user genres:', error);
         });
-    }
+    },
+    handleMovieSelected(movieId) {
+      this.$emit('movie-selected', movieId);
+    },
   },
   computed: {
     GenreMoviesGroup() {
-      const groups = [];
-      for (let i = 0; i < this.selectedGenres.length; i++) {
-        const genre = this.selectedGenres[i];
-        const movies = this.genreMovies[genre.genre_id];
-        if (movies) {
-          const genreGroup = [];
-          for (let j = 0; j < movies.length; j += 5) {
-            const group = movies.slice(j, j + 5);
-            genreGroup.push(group);
-          }
-          groups.push(genreGroup);
+    const groups = [];
+    for (let i = 0; i < this.selectedGenres.length; i++) {
+      const genre = this.selectedGenres[i];
+      const movies = this.genreMovies[genre.genre_id];
+      if (movies) {
+        const genreGroup = [];
+        for (let j = 0; j < movies.length; j += 5) {
+          const group = movies.slice(j, j + 5);
+          genreGroup.push(group);
         }
+        groups.push(genreGroup);
+      } else {
+        groups.push([]);
       }
-      return groups;
     }
+    return groups;
+  }
 }
 
 }

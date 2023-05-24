@@ -6,7 +6,7 @@
         <h5 class="card-title text-center" v-show="hover">{{ movie.title }}</h5>
         <div class="icon-text justify-content-end" v-show="hover">
           <i class="bi bi-star-fill c-yellow me-2"></i>
-          <p class="content c-yellow">{{ movie.vote_average }}</p>
+          <p class="vote-average c-yellow">{{ movie.vote_average }}</p>
         </div>
       </div>
     </div>
@@ -45,6 +45,7 @@ export default {
     },
     handleMouseOver() {
       this.hover = true;
+      this.$emit("movie-play", this.movie.id);
     },
     handleMouseLeave() {
       this.hover = false;
@@ -96,7 +97,7 @@ export default {
   text-align: center;
 }
 
-.content {
+.vote-average {
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 600;
   margin: 0;
