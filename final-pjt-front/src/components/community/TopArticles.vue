@@ -6,6 +6,7 @@
           <th>작성자</th>
           <th>제목</th>
           <th>작성일</th>
+          <th>추천수</th>
         </tr>
       </thead>
       <tbody>
@@ -13,12 +14,10 @@
           <td>{{ article.username }}</td>
           <td><router-link :to="{ name:'DetailView', params:{ id:article.id } }" class="title-link">{{ article.title }}</router-link></td>
           <td>{{ formatDateTime(article.created_at) }}</td>
+          <td>{{ article.likeCount }}</td>
         </tr>
       </tbody>
     </table>
-
-    
-
 
   </div>
 </template>
@@ -34,21 +33,40 @@ export default {
         topArticles: [],
       }
     },
-    created() {
-      this.fetchTopArticles()
+    async created() {
+      await this.fetchTopArticles()
     },
     methods: {
       async fetchTopArticles() {
         try {
           const response = await axios.get(`${API_URL}/api/v1/articles/top/`)
-          this.topArticles = response.data
+          const articles = response.data
+          for (const article of articles) {
+            await this.getLikeCount(article)
+          }
+          this.topArticles = articles
           console.log(response)
+          
         } catch (error) {
           console.log('Failed to fetch popular articles:', error)
         }
       },
       formatDateTime(dateTime) {
       return moment(dateTime).format('YYYY-MM-DD')
+      },
+      async getLikeCount(article) {
+        try {
+          const token = this.$store.state.token.token
+          const config = {
+            headers: {
+              Authorization: `Token ${token}`,
+            }
+          }
+          const response = await axios.get(`${API_URL}/api/v1/articles/${article.id}/like/`, config)
+          article.likeCount = response.data.likeCount 
+        } catch (error) {
+          console.log('Failed to get like count for article ${article.id}: ', error)
+        }
       }
     }
   }
@@ -65,10 +83,13 @@ export default {
     width: 20%;
   }
   .article-list-item td:nth-child(2) {
-    width: 60%;
+    width: 40%;
+  }
+  .article-list-item td:nth-child(3) {
+    width: 20%;
   }
   .article-list-item td:last-child {
-    width: 10px;
+    width: 20px;
   }
   .title-link {
     text-decoration-line: none;

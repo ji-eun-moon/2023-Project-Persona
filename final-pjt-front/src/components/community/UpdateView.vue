@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 style="color:aliceblue; font-weight:bold; font-size:30px; margin-top:30px;"><i class="bi bi-pencil-fill me-2"></i>Update Your Content</h1>
+    <h1 style="color:aliceblue; font-weight:bold; font-size:36px; margin-top:30px;"><i class="bi bi-pencil-fill me-2"></i>Update Your Content</h1>
     <div class="update-form">
       <form @submit.prevent="updateArticle" class="form">
         <label for="title" class="label"></label>
@@ -63,7 +63,6 @@ export default {
   max-width: 500px;
   margin: 0 auto;
   padding: 20px;
-  /* background-color: #f7f7f7; */
   border: 1px solid #ccc;
   border-radius: 5px;
   margin-top: 40px;
@@ -92,6 +91,7 @@ h1 {
   border: 1px solid aliceblue;
   border-radius: 10px;
   margin-bottom: 10px;
+  margin-top: 25px;
 }
 .textarea {
   width: 100%;
@@ -110,6 +110,7 @@ h1 {
   border: none;
   border-radius: 10px;
   cursor: pointer;
+  margin-bottom: 25px;
 }
 
 .submit-btn:hover {

@@ -40,7 +40,6 @@ export default {
     },
     handleClick() {
       // 클릭된 카드의 movie id를 사용하여 디테일 페이지로 이동
-      // this.$router.push({ name: "MovieDetail", params: { movieId: this.movie.id } });
       this.$emit("movie-selected", this.movie.id);
     },
     handleMouseOver() {

@@ -15,7 +15,7 @@
             v-for="(article, index) in displayedArticles"
             :key="article.id"
             :article="article"
-            :index="index"
+            :index="getArticleNumber(index)"
           />
         </tbody>
       </table>
@@ -67,9 +67,12 @@ export default {
       articles: (state) => state.community.articles
     }),
     displayedArticles() {
+      const sortedArticles = this.articles.slice().sort((a,b) => {
+        return new Date(b.created_at) - new Date(a.created_at)
+      })
       const startIndex = (this.currentPage - 1) * this.itemsPerPage;
       const endIndex = startIndex + this.itemsPerPage;
-      return this.articles.slice(startIndex, endIndex);
+      return sortedArticles.slice(startIndex, endIndex);
     },
     totalPages() {
       return Math.ceil(this.articles.length / this.itemsPerPage);
@@ -88,6 +91,9 @@ export default {
       if (this.currentPage < this.totalPages) {
         this.currentPage++;
       }
+    },
+    getArticleNumber(index) {
+      return (this.currentPage - 1) * this.itemsPerPage + index + 1
     }
   }
 };
