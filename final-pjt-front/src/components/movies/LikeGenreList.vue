@@ -62,7 +62,7 @@ export default {
         }
       }
       this.selectedGenres = randomIndexes.map(index => this.userGenres[index]);
-      console.log(this.selectedGenres)
+      // console.log(this.selectedGenres)
       this.getMoviesByGenres();
     },
     getMoviesByGenres() {

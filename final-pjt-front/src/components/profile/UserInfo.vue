@@ -4,14 +4,14 @@
     <div class="d-flex user-info align-items-between justify-content-center">
       <div class="d-flex justify-content-center">
         <div class="mb-5 me-5">
+          <h2 class="profile-item-header mb-3">{{ isMyProfile ? "나의" : username + "'s" }} 부캐</h2>
           <div>
             <img :src="getActorImageURL(userInfo?.profile_img)" alt="userInfo.username" class="profile-image mb-5">
           </div>
-          <div class="mb-5">
+          <div class="mb-5 fs-5 font-weight-bold">
             <p>{{ actorDetail?.name }}</p>
             <p>{{ actorDetail?.birthday}}</p>
             <p>{{ actorDetail?.place_of_birth}}</p>
-            <!-- <h5 class="user-info-item">{{ userInfo?.username }}</h5> -->
           </div>
           <div>
             <button v-if="isMyProfile" @click="handleClickActor" class="btn btn-secondary random-btn">부캐 랜덤 추천 받기</button>
@@ -19,9 +19,9 @@
         </div>
       </div>
 
-      <div class="d-flex row">
+      <div class="d-flex row info-item">
         <div v-if="userInfo && userInfo.character" class="character-info">
-          <h2 class="profile-item-header">{{ isMyProfile ? "나의" : $route.params.username + "'s" }} 부캐 주요 작품</h2>
+          <h2 class="profile-item-header">부캐 주요 작품</h2>
           
           <div class="character-movie">
             <div v-for="movie in limitedMovies" :key="movie.id" class="mb-3">
@@ -114,18 +114,8 @@ export default {
     limitedMovies() {
       return this.movies.slice(0, 5);
     },
-    // userInfo() {
-    //   return this.$store.state.userInfo.userProfile;
-    // },
-    // profileImg() {
-    //   return this.$store.state.userInfo.profileImg;
-    // },
-    // actor() {
-    //   return this.$store.state.userInfo.actor;
-    // }
 	},
   created() {
-    // this.getUserInfo();
     this.getUserProfile(this.$route.params.username);
     this.fetchUserGenres()
   },
@@ -137,18 +127,6 @@ export default {
         return require("@/assets/default-profile.jpg");
       }
     },
-    // getUserInfo() {
-    //   this.$store.dispatch('fetchUserProfile', this.username)
-    //     .then(() => {
-    //       const user = this.$store.state.userInfo.userProfile;
-    //       if (user && user.character) {
-    //         this.$store.dispatch('fetchActorDetail', user.character);
-    //       }
-    //     })
-    //     .catch(error => {
-    //       console.error('유저 정보를 가져오는 중 오류 발생:', error);
-    //     });
-    // },
     async getUserProfile(username) {
       try {
         const response = await axios.get(`http://127.0.0.1:8000/api/v1/profile/${username}`);
@@ -158,7 +136,6 @@ export default {
           this.getActorDetail(this.userInfo.character)
           this.getMoviesByActor(this.userInfo.character)
         }
-        // commit('setProfileImg', response.data.profile_img)
       } catch (error) {
         console.error('유저 정보를 가져오는 중 오류 발생:', error);
       }
@@ -245,7 +222,6 @@ export default {
 
 <style>
 .profile-image {
-  margin-left: 30px;
   width: 180px;
   object-fit: cover;
   border-radius: 40%;
@@ -308,14 +284,10 @@ export default {
   font-weight: 400px;
 }
 
-.like-genres {
-  margin-top: 20px;
-}
-
 .user-info {
   font-size: 15px;
   font-weight: 400;
-  margin : 50px;
+  margin-top: 30px;
 }
 
 .character-movie {
@@ -329,5 +301,9 @@ export default {
 .character-info {
   display: flex;
   flex-direction: column;
+}
+
+.info-item{
+  margin-left: 70px;
 }
 </style>

@@ -15,7 +15,7 @@ const trendingList = {
     },
     GET_WEEKLY_TRENDING_MOVIES(state, movies) {
       state.weeklyTrendingMovies = movies;
-    }
+    },
   },
 
   actions: {
@@ -33,13 +33,13 @@ const trendingList = {
     getWeeklyTrendingMovies(context) {
       return axios.get(`${API_URL}/week?api_key=${API_KEY}&language=ko`)
         .then(response => {
-          console.log('GET_WEEKLY_TRENDING_MOVIES : ', response.data.results)
+          // console.log('GET_WEEKLY_TRENDING_MOVIES : ', response.data.results)
           context.commit('GET_WEEKLY_TRENDING_MOVIES', response.data.results);
         })
         .catch(error => {
           console.error('Error weekly trending movies:', error);
         });
-    }
+    },
   },
 
 }

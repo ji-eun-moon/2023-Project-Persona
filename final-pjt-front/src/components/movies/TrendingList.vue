@@ -1,66 +1,64 @@
 <template>
   <div>
-      <div class="video-container" v-if="currentTrailerUrl !== ''">
-        <iframe :src="currentTrailerUrl" width="100%" height="100%" frameborder="0" allowfullscreen autoplay></iframe>
-      </div>
-    
+    <div class="video-container">
+      <iframe :src="currentTrailerUrl" width="100%" height="100%" frameborder="0" allowfullscreen autoplay></iframe>
+    </div>
     <div class="trending-list">
-      <div class="trending-list-header">
-        <h1 class="me-2 list-header">What's Trending</h1>
-        <div class="button-container">
-          <button :class="['btn', 'btn-outline-secondary', { active: showDaily }]" @click="showDailyTrendingMovies" class="me-2">일별</button>
-          <button :class="['btn', 'btn-outline-secondary', { active: showWeekly }]" @click="showWeeklyTrendingMovies">주별</button>
+        <div class="trending-list-header mt-4">
+          <h1 class="me-2 list-header">What's Trending</h1>
+          <div class="button-container">
+            <button :class="['btn', 'btn-outline-secondary', { active: showDaily }]" @click="showDailyTrendingMovies" class="me-2">일별</button>
+            <button :class="['btn', 'btn-outline-secondary', { active: showWeekly }]" @click="showWeeklyTrendingMovies">주별</button>
+          </div>
         </div>
-      </div>
-      <div class="card-container" v-if="showDaily">
-        <div id="dailyCarousel" class="carousel slide" data-bs-ride="carousel">
-          <div class="carousel-inner">
-            <div v-for="(group, index) in dailyTrendingMoviesGrouped" :key="index" :class="['carousel-item', { active: index === 0 }]">
-              <ul class="card-list">
-                <li v-for="movie in group" :key="movie.id" class="card-item">
-                  <MovieCard :movie="movie" @movie-selected="handleMovieSelected" @movie-play="PlayVideo"/>
-                </li>
-              </ul>
+        <div class="card-container" v-if="showDaily">
+          <div id="dailyCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+              <div v-for="(group, index) in dailyTrendingMoviesGrouped" :key="index" :class="['carousel-item', { active: index === 0 }]">
+                <ul class="card-list">
+                  <li v-for="movie in group" :key="movie.id" class="card-item">
+                    <MovieCard :movie="movie" @movie-selected="handleMovieSelected" @movie-play="PlayVideo"/>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="carousel-control-wrapper">
+              <button class="carousel-control-prev" type="button" data-bs-target="#dailyCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#dailyCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+              </button>
             </div>
           </div>
-          <div class="carousel-control-wrapper">
-            <button class="carousel-control-prev" type="button" data-bs-target="#dailyCarousel" data-bs-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#dailyCarousel" data-bs-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Next</span>
-            </button>
-          </div>
         </div>
-      </div>
-      <div class="card-container" v-if="showWeekly">
-        <div id="weeklyCarousel" class="carousel slide" data-bs-ride="carousel">
-          <div class="carousel-inner">
-            <div v-for="(group, index) in weeklyTrendingMoviesGrouped" :key="index" :class="['carousel-item', { active: index === 0 }]">
-              <ul class="card-list">
-                <li v-for="movie in group" :key="movie.id" class="card-item">
-                  <MovieCard :movie="movie" @movie-selected="handleMovieSelected" @movie-play="PlayVideo"/>
-                </li>
-              </ul>
+        <div class="card-container" v-if="showWeekly">
+          <div id="weeklyCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+              <div v-for="(group, index) in weeklyTrendingMoviesGrouped" :key="index" :class="['carousel-item', { active: index === 0 }]">
+                <ul class="card-list">
+                  <li v-for="movie in group" :key="movie.id" class="card-item">
+                    <MovieCard :movie="movie" @movie-selected="handleMovieSelected" @movie-play="PlayVideo"/>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="carousel-control-wrapper">
+              <button class="carousel-control-prev" type="button" data-bs-target="#weeklyCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#weeklyCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+              </button>
             </div>
           </div>
-          <div class="carousel-control-wrapper">
-            <button class="carousel-control-prev" type="button" data-bs-target="#weeklyCarousel" data-bs-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#weeklyCarousel" data-bs-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Next</span>
-            </button>
-          </div>
         </div>
       </div>
-
-    </div>
-    </div>
+  </div>
 
 </template>
 
@@ -78,14 +76,14 @@ export default {
     return {
       showDaily: true,
       showWeekly: false,
-      currentTrailerUrl: '',
-      randomTrailerUrl: '',
+      currentTrailerUrl: null,
     };
   },
-  created() {
-    this.getDailyTrendingMovies();
-    this.getWeeklyTrendingMovies();
-  },
+  async created() {
+  await this.getDailyTrendingMovies();
+  await this.getWeeklyTrendingMovies();
+  this.setCurrentTrailerUrl();
+},
   methods: {
     ...mapActions([
       'getDailyTrendingMovies',
@@ -112,29 +110,28 @@ export default {
         const response = await axios.get(`https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${API_KEY}`);
         const videos = response.data.results;
         const trailer = videos.find(video => video.type === 'Trailer' && video.site === 'YouTube');
+        // console.log(trailer.key)
         if (trailer) {
           this.currentTrailerUrl = `https://www.youtube.com/embed/?autoplay=1&mute=1&controls=0&playlist=${trailer.key}&loop=1`;
+          // console.log(this.currentTrailerUrl)
         } else {
           console.log('예고편 동영상이 없습니다.');
         }
       } catch (error) {
+        this.currentTrailerUrl = ''; // 예고편이 없는 경우
         console.error('Failed to fetch trailer video:', error);
       }
     },
-    playRandomMovieTrailer() {
+    async setCurrentTrailerUrl() {
       if (this.dailyTrendingMovies.length > 0) {
-        const randomIndex = Math.floor(Math.random() * this.dailyTrendingMovies.length);
-        const randomMovie = this.dailyTrendingMovies[randomIndex];
-        this.fetchTrailerVideo(randomMovie.id);
+        const firstMovie = this.dailyTrendingMovies[0];
+        // console.log('첫번째 영화:',firstMovie)
+        await this.fetchTrailerVideo(firstMovie.id);
+        // console.log('비디오:', this.currentTrailerUrl);
       }
     },
-    setRandomTrailerUrl() {
-      if (this.dailyTrendingMovies.length > 0) {
-        const randomIndex = Math.floor(Math.random() * this.dailyTrendingMovies.length);
-        const randomMovie = this.dailyTrendingMovies[randomIndex];
-        this.randomTrailerUrl = `https://www.youtube.com/embed/?autoplay=1&mute=1&controls=0&playlist=${randomMovie.videoKey}&loop=1`;
-      }
-    },
+    
+    
   },
   computed: {
     ...mapState({
@@ -209,7 +206,7 @@ export default {
 
 .video-container {
   position: relative;
-  padding-bottom: 56.25%; /* 16:9 비율에 맞게 조정 */
+  padding-bottom: 56.25%; 
   height: 0;
   overflow: hidden;
 }
@@ -221,5 +218,4 @@ export default {
   width: 100%;
   height: 100%;
 }
-
 </style>
