@@ -1,0 +1,190 @@
+[
+{
+    "model": "articles.article",
+    "pk": 12,
+    "fields": {
+        "user": 1,
+        "title": "ㅇㅁㄴㄻ",
+        "content": "ㄴㅇㄹㄴㅁㅇㄹ",
+        "created_at": "2023-05-23T01:11:56.346Z",
+        "updated_at": "2023-05-23T01:11:56.346Z",
+        "like_users": [
+            2
+        ]
+    }
+},
+{
+    "model": "articles.article",
+    "pk": 13,
+    "fields": {
+        "user": 1,
+        "title": "너무 행복해",
+        "content": "드디어 성공했어 ㅎㅎㅎㅎㅎㅎㅎㅎ",
+        "created_at": "2023-05-23T01:12:31.981Z",
+        "updated_at": "2023-05-23T01:12:31.981Z",
+        "like_users": [
+            1,
+            2
+        ]
+    }
+},
+{
+    "model": "articles.article",
+    "pk": 14,
+    "fields": {
+        "user": 1,
+        "title": "ㅇㅇㄹ",
+        "content": "ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㄴㅇ",
+        "created_at": "2023-05-23T02:55:07.839Z",
+        "updated_at": "2023-05-23T02:55:07.839Z",
+        "like_users": [
+            1
+        ]
+    }
+},
+{
+    "model": "articles.article",
+    "pk": 18,
+    "fields": {
+        "user": 1,
+        "title": "엽",
+        "content": "얍",
+        "created_at": "2023-05-24T01:46:12.987Z",
+        "updated_at": "2023-05-24T01:46:12.987Z",
+        "like_users": []
+    }
+},
+{
+    "model": "articles.article",
+    "pk": 36,
+    "fields": {
+        "user": 1,
+        "title": "안녕하세요",
+        "content": "잘있어요~~~",
+        "created_at": "2023-05-24T08:22:51.379Z",
+        "updated_at": "2023-05-25T01:37:23.239Z",
+        "like_users": [
+            1,
+            2,
+            3,
+            4
+        ]
+    }
+},
+{
+    "model": "articles.article",
+    "pk": 39,
+    "fields": {
+        "user": 1,
+        "title": "ㅠㅠㅠㅠ",
+        "content": "너무 행복",
+        "created_at": "2023-05-24T08:40:32.006Z",
+        "updated_at": "2023-05-24T08:40:32.006Z",
+        "like_users": [
+            3
+        ]
+    }
+},
+{
+    "model": "articles.article",
+    "pk": 44,
+    "fields": {
+        "user": 1,
+        "title": "넘 좋아용",
+        "content": "뿌듯해요 ㅎㅎㅎㅎㅎㅎㅎ",
+        "created_at": "2023-05-25T00:18:52.108Z",
+        "updated_at": "2023-05-25T00:56:33.460Z",
+        "like_users": [
+            1
+        ]
+    }
+},
+{
+    "model": "articles.article",
+    "pk": 47,
+    "fields": {
+        "user": 1,
+        "title": "ssafy11 계정 입니당",
+        "content": "우오아ㅏㅇ아아 테스트",
+        "created_at": "2023-05-25T00:57:41.406Z",
+        "updated_at": "2023-05-25T01:35:28.680Z",
+        "like_users": [
+            1,
+            2,
+            3
+        ]
+    }
+},
+{
+    "model": "articles.article",
+    "pk": 48,
+    "fields": {
+        "user": 3,
+        "title": "ssafy2 계정 입미당",
+        "content": "우왕ㅇ아아앙ㅇㅇㅇㅇㅇㅇ",
+        "created_at": "2023-05-25T00:58:33.174Z",
+        "updated_at": "2023-05-25T00:58:33.174Z",
+        "like_users": [
+            1,
+            2,
+            3
+        ]
+    }
+},
+{
+    "model": "articles.article",
+    "pk": 49,
+    "fields": {
+        "user": 2,
+        "title": "ssafy13 계정이에용",
+        "content": "우아ㅗ아ㅏㅇㅇㅇ아아아앙",
+        "created_at": "2023-05-25T00:59:14.732Z",
+        "updated_at": "2023-05-25T00:59:14.732Z",
+        "like_users": [
+            1,
+            2,
+            3
+        ]
+    }
+},
+{
+    "model": "articles.article",
+    "pk": 50,
+    "fields": {
+        "user": 3,
+        "title": "얍",
+        "content": "얍ㅇ뱌",
+        "created_at": "2023-05-25T01:44:30.145Z",
+        "updated_at": "2023-05-25T01:44:30.145Z",
+        "like_users": []
+    }
+},
+{
+    "model": "articles.article",
+    "pk": 51,
+    "fields": {
+        "user": 4,
+        "title": "히힛",
+        "content": "너무 뿌듯하다아아아아",
+        "created_at": "2023-05-25T03:04:34.819Z",
+        "updated_at": "2023-05-25T03:04:34.819Z",
+        "like_users": [
+            5
+        ]
+    }
+},
+{
+    "model": "articles.article",
+    "pk": 53,
+    "fields": {
+        "user": 5,
+        "title": "안녕하세요",
+        "content": "오늘 처음 회원가입 해서 이 서비스를 이용하는 회원입니다. 만나서 반가워요 ~~~",
+        "created_at": "2023-05-25T05:07:15.355Z",
+        "updated_at": "2023-05-25T05:07:20.418Z",
+        "like_users": [
+            5
+        ]
+    }
+}
+]
