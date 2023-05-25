@@ -78,6 +78,19 @@
     </div>
 
     <router-view/> 
+
+    <div class="fs-3 text-center footer">
+      <div class="d-flex justify-content-center align-items-center" style="height: 100px">
+        <div class="">
+          <div><a href="https://github.com/mjieun0956/2023-Project-Persona"><i class="bi bi-github" style="color:aliceblue;"></i></a></div>
+          <div style="font-size: 10px;">MADE BY</div>
+          <div class="d-flex">
+            <div style="font-size: 15px; margin-right: 10px;">Jieun Moon</div>
+            <div style="font-size: 15px; margin-left: 10px;">Jisoo Choi</div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -171,9 +184,22 @@ export default {
 </script>
 
 <style>
+.footer {
+  background-color: #24292f;
+  font-family: 'Noto Sans KR',  sans-serif;
+  font-weight: 300;
+  color: aliceblue;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
+}
+
 body {
   background-color: #1c1d1f;
 }
+
 #app {
   font-family: 'Noto Sans KR', sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -181,6 +207,10 @@ body {
   text-align: center;
   color: #2c3e50;
   background-color: #1c1d1f;
+  /* min-height: 100%; */
+  position: relative;
+  padding-bottom: 170px;
+  min-height: 100vh;
 }
 
 nav {
