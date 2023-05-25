@@ -355,8 +355,8 @@ export default {
         this.$store.dispatch('saveUserProfileImg', response.data.profile_img)
         // 부캐 정보를 상태 정보에 저장
         this.$store.dispatch('saveActor', actor);
-        eventBus.$emit('refresh-app');
         alert(`나의 부캐가 '${actor.name}'으로 저장되었습니다!`)
+        eventBus.$emit('refresh-app');
       } catch (error) {
         console.error('이미지 업로드 중 오류 발생:', error);
       }
