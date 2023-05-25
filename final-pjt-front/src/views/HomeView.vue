@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="container">
+      <h1 class="movie-title my-5">Explore Films as Your Persona !</h1>
       <TrendingList class="my-5" @movie-selected="handleMovieSelected"/>
       <NowPlayingList class="my-5" @movie-selected="handleMovieSelected"/>
       <UpcomingList class="my-5" @movie-selected="handleMovieSelected"/>
@@ -137,7 +138,7 @@ export default {
   padding: 20px;
   text-align: center;
   border-radius: 10px;
-  width: 90%;
+  width: 70%;
   overflow-y: auto;
 }
 

@@ -4,8 +4,10 @@
       <div class="container">
 
         <!-- <router-link class="navbar-brand" :to="{ name: 'home' }">logo</router-link> -->
-        <img :src="require('@/assets/eye-mask.png')" class="logo-img" alt="">
-        <img :src="require('@/assets/persona.png')" class="logo me-2" alt="">
+        <a :href="homeLink">
+          <img :src="require('@/assets/eye-mask.png')" class="logo-img cursor-pointer" alt="">
+          <img :src="require('@/assets/persona.png')" class="logo me-2 cursor-pointer" alt="">
+        </a>
           <ul class="navbar-nav movie-title">
             <li class="nav-item">
               <router-link class="nav-link" :to="{ name: 'home' }">Home</router-link>
@@ -26,10 +28,10 @@
                 MyPage
               </button>
               <div class="dropdown-menu dropdown-menu-end justify-content-center" aria-labelledby="dropdownMenuButton1">
-                <div class="">
-                  <img :src="getProfileImageURL(userInfo)" alt="userInfo.username" class="my-profile-image mb-3">
-                </div>
-                  <div class="d-flex align-items-center mypage-items">
+                <div class="d-flex align-items-center mypage-items">
+                    <div>
+                      <img :src="getProfileImageURL(userInfo)" alt="userInfo.username" class="my-profile-image mb-3">
+                    </div>
                     <!-- <router-link class="nav-link c-yellow" :to="{ name: 'LoginView' }" v-if="!$store.state.token.loggedIn">login</router-link> -->
                     <div>
                       <button @click="loginShow=true" class="btn btn-outline-dark" v-if="!$store.state.token.loggedIn">LOGIN</button>
@@ -38,7 +40,7 @@
                       <h3 class="mb-3 hello">Hello, {{this.$store.state.token.username}}</h3>
                     </div>
 
-                      <h5 class="mt-2">선호 장르</h5>
+                      <h5 class="mt-2" v-if="this.$store.state.token.loggedIn">선호 장르</h5>
                       <div v-if="userGenres.length > 0 && $store.state.token.loggedIn" class="d-flex ms-5">
                         <ul class="genre-list">
                           <li v-for="genre in userGenres" :key="genre.id" class="genre-list-item mb-2">
@@ -46,12 +48,12 @@
                           </li>
                         </ul>
                       </div>
-                      <div v-else>
+                      <div v-else-if="this.$store.state.token.loggedIn">
                         <p>선택한 장르가 없습니다.</p>
                       </div>
 
-                    <div class="mt-2">
-                      <router-link class="profile-link" :to="{ name: 'profile', params: { username: $store.state.token.username }}" v-if="$store.state.token.loggedIn">나의 프로필 보기</router-link>
+                    <div class="mt-2" v-if="this.$store.state.token.loggedIn">
+                      <a class="profile-link cursor-pointer" :href="profileLink">나의 프로필 보기</a>
                     </div>
                     <button @click="logout" v-if="$store.state.token.loggedIn" class="btn btn-outline-danger mt-3">LOGOUT</button>
                   </div>
@@ -108,11 +110,16 @@ export default {
     userInfo() {
       return this.$store.state.userInfo.userProfile;
     },
+    profileLink() {
+      const username = this.$store.state.token.username;
+      return `http://localhost:8080/profile/${username}/`;
+    },
 	},
   data() {
     return {
       loginShow: false,
       userGenres:[],
+      homeLink: "http://localhost:8080/home/"
     }
   },
   methods : {
@@ -157,7 +164,7 @@ export default {
         .catch(error => {
           console.error('Failed to fetch user genres:', error);
         });
-    }
+    },
   },
 
 }
@@ -201,7 +208,6 @@ nav a.router-link-exact-active {
   border-radius: 40%;
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.3);
   background-color: aliceblue;
-  margin-left: 90px;
 }
 
 .mypage-items {
