@@ -1,28 +1,33 @@
 <template>
   <div class="container">
     <div class="detail-box">
-      <!-- <p class="movie" style="text-align: left; margin-left: 10px;">No. {{ article?.id }}</p> -->
       <p class="text-title" style="text-align: left; margin-left: 10px; font-size:30px; margin-bottom:20px;" >{{ article?.title }}</p>
       <p class="text cursor-pointer" style="text-align: left; margin-left: 10px;" @click="gotoUserProfile(article.username)">{{ article.username }}</p>
       <p class="text" style="text-align: left; margin-left: 10px;">{{ formatDateTime(article.created_at) }}</p>
-      <!-- <p class="review-username review-content movie me-3 cursor-pointer" @click="goToUserProfile(review.username)" ><p/> -->
 
-      <p class="text" style="text-align: left; margin-left: 10px;">마지막 작성시간: {{ formatDateTime(article.updated_at) }}</p>
-      <button class="like-btn right-aligned" :class="{ liked: isLiked }" @click="toggleLike(article.id)">
+      <div class="detail-box-wrapper">
+        <p class="text" style="text-align: left; margin-left: 10px;">마지막 작성시간: {{ formatDateTime(article.updated_at) }}</p>
+        <button class="like-btn right-aligned" :class="{ liked: isLiked }" @click="toggleLike(article.id)">
         <div class="hand">
           <div class="thumb"></div>
         </div>
         <span>Like <span>{{ likeCount }}</span></span>
-      </button>
+        </button>
+      </div>
+      
       <hr style="color:aliceblue;">
       <div class="content">
         <p>{{ article?.content }}</p>
       </div>
 
-      <div class="actions">
+      <div class="actions" v-if="article.username === username">
         <button @click="updateArticleBtn" class="update-btn me-1">수정</button>
         <button @click="deleteArticle" class="delete-btn">삭제</button>
       </div>
+
+      <!-- <div class="d-flex justify-content-end" v-if="review.username === username">
+                <button class="btn btn-danger btn-sm mb-3 review-del" @click="deleteReview(review.id)" >삭제</button>
+              </div> -->
     
       <hr>
       <div class="comment-box">
@@ -43,10 +48,13 @@
       <div v-for="(comment,index) in commentList" :key="`${comment.id}-${index}`" class="comment-item">
         <p class="comment-username">{{ comment.username }}</p>
         <p class="comment-datetime">{{ formatDateTime(comment.created_at) }}</p>
-        <p class="comment-content">{{ comment.content }}</p>
-        <div class="comment-delete-container">
-          <button @click="deleteComment(comment.id)" class="comment-delete">삭제</button>
+        <div class="comment-content-wrapper">
+          <p class="comment-content">{{ comment.content }}</p>
+          <div class="comment-delete-container" v-if="comment.username === username">
+            <button @click="deleteComment(comment.id)" class="comment-delete ">삭제</button>
+          </div>
         </div>
+        
       </div>
     </div>
     
@@ -70,6 +78,11 @@ export default {
       likeCount: 0,
     }
   },
+  computed: {
+    username() {
+      return this.$store.state.token.username
+    },
+  },
   created() {
     this.getArticleDetail()
     this.checkLikeStatus(this.$route.params.id)
@@ -88,10 +101,13 @@ export default {
       .catch(err => console.log(err))
     },
     deleteArticle() {
-      axios({
-        method:'delete',
-        url: `${API_URL}/api/v1/articles/${this.article.id}/`,
-      })
+      const token = this.$store.state.token.token
+      const config = {
+        headers: {
+          Authorization: `Toekn ${token}`,
+        },
+      }
+      axios.delete(`${API_URL}/api/v1/articles/${this.article.id}/`, config)
       .then(() => {
         this.$router.push({ name:'community' })
         // eventBus.$emit('articleCreated')
@@ -128,22 +144,28 @@ export default {
           },
         }
         const response = await axios.get(`${API_URL}/api/v1/articles/${this.$route.params.id}/comments/`,config)
-        this.commentList = response.data
-        console.log(this.commentList)
+        this.commentList = response.data.sort((a,b) => {
+          // 날짜를 기준으로 내림차순 정렬
+          return new Date(b.created_at) - new Date(a.created_at)
+        })
+        // console.log(this.commentList)
       } catch (error) {
         console.error('Failed to get comment list:', error)
       }
     },
     deleteComment(commentId) {
-      axios({
-        method:'delete',
-        url: `${API_URL}/api/v1/comments/${commentId}/`,
-      })
-      .then(() => {
-        location.reload()
-      })
-      .catch(err => console.log(err))
-    },
+      const token = this.$store.state.token.token 
+      const config = {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      }
+      axios.delete(`${API_URL}/api/v1/comments/${commentId}/`, config)
+        .then(() => {
+          location.reload()
+        })
+        .catch(err => console.log(err))
+      },
     async toggleLike(articleId) {
       const previousLiked = this.isLiked;
       this.isLiked = !previousLiked;
@@ -166,10 +188,8 @@ export default {
           },
         };
         const response = await axios.get(`${API_URL}/api/v1/articles/${articleId}/like/`, config);
-        console.log(response.data)
         this.isLiked = response.data.isLiked; // 좋아요 여부 업데이트
         this.likeCount = response.data.likeCount; // 좋아요 수 업데이트
-        console.log(this.isLiked, this.likeCount)
       } catch (error) {
         console.error('Failed to check like status:', error);
       }
@@ -205,6 +225,10 @@ export default {
     border: 2px solid #ccc;
     border-radius: 5px;
     margin-bottom: 10px;
+  }
+  .detail-box-wrapper {
+    display: flex;
+    justify-content: space-between;
   }
   .text-title {
     font-size: 16px;
@@ -268,6 +292,10 @@ export default {
     color: white;
     font-size: 12px;
   }
+  .comment-content-wrapper {
+    display: flex;
+    justify-content: space-between;
+  }
   .comment-content {
     text-align: left;
     margin-bottom: 0;
@@ -277,7 +305,7 @@ export default {
   .content {
     text-align: left;
     margin-left: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 100px;
     font-size: 18px;
     line-height: 1.5;
     color: white;

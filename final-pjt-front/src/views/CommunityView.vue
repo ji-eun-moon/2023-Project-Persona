@@ -38,9 +38,6 @@ export default {
       this.getArticles()
       eventBus.$on('articleCreated', this.handleArticleCreated)
     },
-    // destroyed() {
-    //   eventBus.$off('articleCreated', this.handleArticleCreated)
-    // },
     methods: {
       getArticles() {
         this.$store.dispatch('getArticles')

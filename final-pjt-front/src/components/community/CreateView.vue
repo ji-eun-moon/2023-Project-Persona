@@ -1,13 +1,13 @@
 <template>
   <div>
-    <h1 style="margin-top:30px; color:aliceblue; margin-bottom:30px;"><i class="bi bi-pencil-fill me-2"></i>Write Your Story</h1>
+    <h1 style="margin-top:30px; color:aliceblue; margin-bottom:30px; font-weight:bold;"><i class="bi bi-pencil-fill me-2"></i>Write Your Story</h1>
     <div class="create-form">
       <form @submit.prevent="createArticle" class="article-form">
         <label for="title" class="title-label"></label>
         <input type="text" id="title" v-model.trim="title" class="title-input"  placeholder="제목을 입력하세요"><br>
         <label for="content" class="textarea-label"></label>
         <textarea id="content" cols="30" rows="10" v-model="content" class="textarea-input"  placeholder="내용을 입력하세요"></textarea><br>
-        <input type="submit" id="submit" class="form-submit">
+        <input type="submit" id="submit" class="form-submit" value="등록">
       </form>
     </div>
     
@@ -29,9 +29,6 @@ export default {
   },
   methods: {
     async createArticle() {
-      // const title = this.title
-      // const content = this.content
-
       try {
         const token = this.$store.state.token.token 
         const config = {
@@ -58,19 +55,6 @@ export default {
         alert('내용을 입력해 주세요')
         return 
       }
-      // axios({
-      //   method: 'post',
-      //   url: `${API_URL}/api/v1/articles/`,
-      //   data: {title,content},
-      //   headers: {
-      //     Authorization: `Token ${this.$store.state.token.token}`,
-      //   },
-      // })
-      // .then(()=> {
-      //   // console.log(res)
-      //   this.$router.push({name:'community'})
-      // })
-      // .catch(err => console.log(err))
     }
   }
 }
@@ -80,24 +64,14 @@ export default {
   .article-form {
     display: flex;
     flex-direction: column;
-    max-width: 400px;
+    max-width: 500px;
     margin: 0 auto;
+    
   }
-  /* .title-label {
-    font-size: 18px;
-    margin-top: 30px;
-    color: aliceblue;
-  } */
-  /* .textarea-label {
-    font-size: 18px;
-    margin-top: 10px;
-    color: aliceblue;
-  } */
   .create-form {
     max-width: 500px;
     margin: 0 auto;
     padding: 20px;
-    /* background-color: #f7f7f7; */
     border: 1px solid #ccc;
     border-radius: 5px;
   }
@@ -125,6 +99,7 @@ export default {
     border: none;
     border-radius: 10px;
     cursor: pointer;
+    margin-bottom: 25px;
   }
   .form-submit:hover {
     background-color: rgb(127, 166, 239);
