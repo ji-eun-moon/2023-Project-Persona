@@ -61,7 +61,6 @@
 - `genres/<username>/` : 특정 유저의 선호하는 장르 등록 및 확인 (GET, POST)
 
 ## 컴포넌트 구조
-
 ![](./README.assets/persona-components-structure.png)
 
 # 영화 추천 알고리즘
@@ -117,7 +116,7 @@
 
 ## 커뮤니티
 ![](./README.assets/community-1.gif)
-![](README.assets/community-2.gif)
+![](./README.assets/community-2.gif)
 - 테이블 형식으로 보여줌
 - 작성한 모든 글을 볼 수 있는 TALK 페이지와 좋아요가 가장 많은 게시글 5개를 뽑아 HOT에 보여줌
 - HOT 게시판에 해당 글의 좋아요 수를 보여줌
