@@ -5,6 +5,7 @@
       <div class="poster-wrapper">
         <img :src="getMoviePosterUrl(movieDetail.poster_path)" alt="Movie Poster" class="poster-image" />
       </div>
+      <a :href="trailerUrl" target="_blank" rel="noopener noreferrer" class="btn btn-outline-light">예고편 보기</a>
         <div class="d-flex justify-content-center ms-3 mt-4">
           <p style="color:white;" class="me-3 movie mt-1">보고 싶은 영화 담기</p>
           <a class="btn-like" @click="toggleLike(movieId)" :disabled="!isLoggedIn">
@@ -65,8 +66,10 @@
             <p class="review-content movie fs-5">{{ review.content }}</p>
             <div class="review-meta d-flex me-3 mt-3">
               <div class="d-flex me-3">
-                <p class="review-username review-content movie me-3 cursor-pointer" @click="goToUserProfile(review.username)" 
-                data-bs-toggle="tooltip" data-bs-placement="top" title="프로필을 보시려면 클릭하세요!">{{ review.username }}</p>
+                <!-- <p class="review-username review-content movie me-3 cursor-pointer" @click="goToUserProfile(review.username)" 
+                data-bs-toggle="tooltip" data-bs-placement="top" title="프로필을 보시려면 클릭하세요!">{{ review.username }}</p> -->
+                <a class="profile-link cursor-pointer review-username review-content movie me-3" :href="profileLink(review.username)"
+                data-bs-toggle="tooltip" data-bs-placement="top" title="프로필을 보시려면 클릭하세요!">{{ review.username }}</a>
                 <p class="movie">{{ formatDateTime(review.created_at) }}</p>
               </div>
               <div class="d-flex justify-content-end" v-if="review.username === username">
@@ -120,6 +123,7 @@ export default {
       rating: 0,
       content: null,
       reviewList: [],
+      trailerUrl: ''
     };
   },
   computed: {
@@ -149,7 +153,7 @@ export default {
   },
   username() {
     return this.$store.state.token.username
-  }
+  },
   },
   created() {
     this.$store.dispatch("getMovieDetail", this.movieId);
@@ -159,9 +163,30 @@ export default {
     }).catch(error => {
       console.error('Failed to save movie:', error);
     });
-    this.getReviewList()
+    this.getReviewList();
+    this.getTrailerVideo(this.movieId);
   },
   methods: {
+    async getTrailerVideo(movieId) {
+      const API_KEY = 'ec7cb21d2c86952874cdb3ff92cd1dfd';
+      try {
+        const response = await axios.get(`https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${API_KEY}`);
+        const videos = response.data.results;
+        const trailer = videos.find(video => video.type === 'Trailer' && video.site === 'YouTube');
+        if (trailer) {
+          this.trailerUrl = `https://www.youtube.com/watch?v=${trailer.key}`;
+        } else {
+          console.log('예고편 동영상이 없습니다.');
+          this.trailerUrl = '';
+        }
+      } catch (error) {
+        console.error('Failed to fetch trailer video:', error);
+        this.trailerUrl = '';
+      }
+    },
+    profileLink(username) {
+      return `http://localhost:8080/profile/${username}/`;
+    },
     setRating: function(rating) {
       this.rating = rating;
     },
@@ -517,4 +542,5 @@ export default {
 .review-del {
   border-radius: 15px;
 }
+
 </style>
